@@ -34,7 +34,7 @@ namespace Orders.frondEnd.Repositories
             var messageJson = JsonSerializer.Serialize(model);
             var messagecontent = new StringContent(messageJson, Encoding.UTF8, "application/json");
             var responsehttp = await _httpClient.PostAsync(url, messagecontent);
-            return new HttpResponseWrapper<object>(null, responsehttp!.IsSuccessStatusCode, responsehttp!)
+            return new HttpResponseWrapper<object>(null, responsehttp!.IsSuccessStatusCode, responsehttp!);
         }
 
         public async Task<HttpResponseWrapper<TActionResponse>> PostAsync<T, TActionResponse>(string url, T model)

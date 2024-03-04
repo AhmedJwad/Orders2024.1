@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34511.98
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.Backend", "Orders.Backend\Orders.Backend.csproj", "{D2F01702-D9B8-4C29-B12B-C9E70991E705}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orders.Backend", "Orders.Backend\Orders.Backend.csproj", "{D2F01702-D9B8-4C29-B12B-C9E70991E705}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.frondEnd", "Orders.frondEnd\Orders.frondEnd.csproj", "{499C4882-3C96-481D-869C-D076827761F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orders.frondEnd", "Orders.frondEnd\Orders.frondEnd.csproj", "{499C4882-3C96-481D-869C-D076827761F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.Shared", "Orders.Shared\Orders.Shared.csproj", "{B0FEC08E-5BA9-42C5-AB1A-637A70549645}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orders.Shared", "Orders.Shared\Orders.Shared.csproj", "{B0FEC08E-5BA9-42C5-AB1A-637A70549645}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.test", "Orders.test\Orders.test.csproj", "{E91EAB39-1B5B-4807-A34E-C8570F5C7DB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orders.test", "Orders.test\Orders.test.csproj", "{E91EAB39-1B5B-4807-A34E-C8570F5C7DB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
