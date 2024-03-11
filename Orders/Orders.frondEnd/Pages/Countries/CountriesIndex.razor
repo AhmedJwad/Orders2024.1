@@ -1,45 +1,37 @@
 ﻿@page "/countries"
-@inject IRepository reposotory
+
 <h3>Countries Index</h3>
-@if(countries==null)
-{
-    <p>the is no countries added  yet</p>
-}
-else
-{
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Countries</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in countries)
-        {
-            <tr>
-                <td>
-                    @item.name
-                </td>
-                <td>
-                    <a class="btn btn-warning">Edit</a>
-                    <button class="btn btn-danger">Delete</button>
-                </td>
-            </tr>
-        }
+<div class="mb-3">
+    <a class="btn btn-primary" href="/countries/create">New Country</a>
+</div>
 
-    </tbody>
+<GenericList MyList="countries">
+   
+    <body>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Countries</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in countries)
+                {
+                    <tr>
+                        <td>
+                            @item.name
+                        </td>
+                        <td>
+                            <a class="btn btn-warning">Edit</a>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                }
 
-</table>
-}
+            </tbody>
 
-@code {
-    public List<Country>? countries { get; set; }
+        </table>
+    </body>
+</GenericList>
 
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        var responsehttp =await reposotory.GetASync<List<Country>>("api/Countries");
-        countries = responsehttp.Response;
-    }
-}

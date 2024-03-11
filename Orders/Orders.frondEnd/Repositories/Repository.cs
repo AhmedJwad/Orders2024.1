@@ -16,6 +16,9 @@ namespace Orders.frondEnd.Repositories
         {
            _httpClient = httpClient;
         }
+
+     
+
         public async Task<HttpResponseWrapper<T>> GetASync<T>(string url)
         {
            var messageHttp=await _httpClient.GetAsync(url);
@@ -49,10 +52,36 @@ namespace Orders.frondEnd.Repositories
             }
             return new HttpResponseWrapper<TActionResponse>(default, true, responsehttp);
         }
+        public async Task<HttpResponseWrapper<object>> DeleteAsync<T>(string url)
+        {
+            var responseHttp=await _httpClient.DeleteAsync(url);
+            return new HttpResponseWrapper<object>(null, !responseHttp.IsSuccessStatusCode, responseHttp);
+        }
         private async Task<T> UnserializeAnswer<T>(HttpResponseMessage messageHttp)
         {
             var response=await messageHttp.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<T>(response, _jsondefaultoption)!;
+        }
+
+        public async Task<HttpResponseWrapper<object>> PutAsync<T>(string url, T model)
+        {
+            var messageJson= JsonSerializer.Serialize(model);
+            var messagecontent=new StringContent(messageJson, Encoding.UTF8, "application/json");
+            var responsehttp= await _httpClient.PutAsync(url, messagecontent);
+            return new HttpResponseWrapper<object>(null, responsehttp.IsSuccessStatusCode, responsehttp);
+        }
+
+        public async Task<HttpResponseWrapper<TActionResponse>> PutAsync<T, TActionResponse>(string url, T model)
+        {
+            var messagejson=JsonSerializer.Serialize(model);
+            var messagecontent=new StringContent(messagejson, Encoding.UTF8, "application/json");   
+            var responsehttp=await _httpClient.PutAsync(url,messagecontent);
+            if (responsehttp.IsSuccessStatusCode)
+            {
+                var response=await UnserializeAnswer<TActionResponse>(responsehttp);
+                return new HttpResponseWrapper<TActionResponse>(response, false, responsehttp);
+            }
+            return new HttpResponseWrapper<TActionResponse>(default, true, responsehttp);
         }
     }
 }
