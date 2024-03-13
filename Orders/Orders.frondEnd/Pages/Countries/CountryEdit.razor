@@ -1,0 +1,13 @@
+﻿@page "/countries/edit/{Id:int}"
+
+<h3>CountryEdit</h3>
+
+@if(Country is null )
+{
+    <Loading/>
+}
+else
+
+{
+    <CountryForm @ref="countryForm" Country="Country" onValidSubmit="EditAsync" ReturnAction="Return"/>
+}

@@ -16,15 +16,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in countries)
+                @foreach (var country in countries!)
                 {
                     <tr>
                         <td>
-                            @item.name
+                            @country.name
                         </td>
                         <td>
-                            <a class="btn btn-warning">Edit</a>
-                            <button class="btn btn-danger">Delete</button>
+                            <a href="/countries/edit/@country.Id" class="btn btn-warning">Edit</a>
+                            <button onclick="@(()=>DeleteAsync(country))" class="btn btn-danger">Delete</button>
                         </td>
                     </tr>
                 }

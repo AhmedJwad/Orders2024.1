@@ -47,7 +47,7 @@ namespace Orders.Backend.Controllers
 
             _context.Remove(country);
             await _context.SaveChangesAsync();
-            return Ok(country);
+            return NoContent();
         }
 
         [HttpPut]
