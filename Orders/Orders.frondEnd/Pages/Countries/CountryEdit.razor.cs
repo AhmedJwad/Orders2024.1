@@ -1,6 +1,7 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
+using Orders.frondEnd.Shared;
 using Orders.Shared.Entities;
 using System.Diagnostics.Metrics;
 
@@ -9,7 +10,7 @@ namespace Orders.frondEnd.Pages.Countries
     public partial class CountryEdit
     {
         private Country? Country { get; set; }
-        private CountryForm? countryForm { get; set; }
+        private FormWithName<Country>? countryForm;
 
         [Inject] private IRepository Repository { get; set; } = null;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null;
@@ -61,7 +62,7 @@ namespace Orders.frondEnd.Pages.Countries
 
         private void Return()
         {
-            countryForm!.formPostedSuccessfully = true;
+            countryForm!.FormPostedSuccessfully = true;
             navigationManager.NavigateTo("/countries");
         }
     }

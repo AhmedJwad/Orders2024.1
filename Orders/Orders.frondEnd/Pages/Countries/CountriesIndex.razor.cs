@@ -33,7 +33,7 @@ namespace Orders.frondEnd.Pages.Countries
                 new SweetAlertOptions
                 {
                     Title = "Confirmation",
-                    Text = $"Are you sure you want to delete the country:{country.name}?",
+                    Text = $"Are you sure you want to delete the country:{country.Name}?",
                     Icon = SweetAlertIcon.Question,
                     ShowCancelButton = true,
 

@@ -1,6 +1,7 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
+using Orders.frondEnd.Shared;
 using Orders.Shared.Entities;
 
 namespace Orders.frondEnd.Pages.Categories
@@ -8,10 +9,10 @@ namespace Orders.frondEnd.Pages.Categories
     public partial class CategoryCreate
     {
         private Category category = new();
-        private CategoryForm? categoryForm = null;
-        [Inject] private IRepository repository { get; set; } = null;
-        [Inject] private SweetAlertService sweetAlertService { get; set; } = null;
-        [Inject] private NavigationManager navigationManager { get; set; } = null;
+        private FormWithName<Category> categoryForm { get; set; }
+        [Inject] private IRepository repository { get; set; } = null!;
+        [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
+        [Inject] private NavigationManager navigationManager { get; set; } = null!;
 
         private async Task CreateAsync()
         {
@@ -38,8 +39,8 @@ namespace Orders.frondEnd.Pages.Categories
 
         private void Return()
         {
-            categoryForm!.FormPostedSuccessfully = true;
-            navigationManager.NavigateTo("/Categories");
+            categoryForm!.FormPostedSuccessfully=true;
+            navigationManager.NavigateTo("/categories");
         }
     }
 }

@@ -2,34 +2,35 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Routing;
-using Orders.Shared.Entities;
+using Orders.Shared.Interfaces;
 
-namespace Orders.frondEnd.Pages.Categories
+namespace Orders.frondEnd.Shared
 {
-    public partial class CategoryForm
+    public partial class FormWithName<TModel> where TModel : IEntityWithName
     {
-        public EditContext editContext = null!;
+        private EditContext editContext = null!;
 
-        [EditorRequired, Parameter]  public Category category { get; set; } = null!;
-        [EditorRequired , Parameter] public EventCallback onValidSubmit { get; set; }
-        [EditorRequired , Parameter] public EventCallback ReturnAction { get; set; }
-        [Inject] public SweetAlertService sweetAlertService { get; set; }
+        [EditorRequired, Parameter] public TModel Model { get; set; } = default!;
+        [EditorRequired, Parameter] public string Label { get; set; } = null!;
+        [EditorRequired, Parameter] public EventCallback OnValidSubmit { get; set; }
+        [EditorRequired, Parameter] public EventCallback ReturnAction { get; set; }
+        [Inject] public SweetAlertService SweetAlertService { get; set; } = null!;
         public bool FormPostedSuccessfully { get; set; }
 
         protected override void OnInitialized()
         {
-            editContext = new(category);
-
+            editContext = new(Model);
         }
 
         private async Task OnBeforeInternalNavigation(LocationChangingContext context)
         {
-            var formwadedited = editContext.IsModified();
-            if(!formwadedited || FormPostedSuccessfully)
+            var formWasEdited = editContext.IsModified();
+            if (!formWasEdited || FormPostedSuccessfully)
             {
                 return;
             }
-            var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+
+            var result = await SweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirmation",
                 Text = "Do you want to leave the page and lose the changes?",
