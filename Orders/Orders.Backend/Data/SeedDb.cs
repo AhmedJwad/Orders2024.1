@@ -22,13 +22,35 @@ namespace Orders.Backend.Data
         }
 
        
-
         private async Task CheckCountriesAsync()
         {
             if(!_context.countries.Any())
             {
-                _context.countries.Add(new Country { Name = "Iraq" });
-                _context.countries.Add(new Country { Name = "Oman" });
+                _context.countries.Add(new Country { Name = "Iraq" ,states=[ 
+                new ()
+                {
+                    Name="babil",
+                    cities=
+                    [
+                       new (){Name="hay alhussein"},
+                    ]
+                }
+                
+                ] });
+               
+                _context.countries.Add(new Country { Name = "Oman" , states=[ 
+                 new ()
+                 {
+                     Name="masqat",
+                     cities=
+                     [
+                         new ()
+                         {
+                             Name="masqat2"
+                         }
+                     ]
+                 }
+                ] });
             }
             await _context.SaveChangesAsync();  
         }

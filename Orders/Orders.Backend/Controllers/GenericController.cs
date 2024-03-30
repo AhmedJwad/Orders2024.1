@@ -16,7 +16,7 @@ namespace Orders.Backend.Controllers
         }
 
         [HttpGet]
-        public virtual async Task<ActionResult> GetAsync()
+        public virtual async Task<IActionResult> GetAsync()
         {
             var action=await _genericUnitOfWork.GetAsync();
             if (action.wasSuccess)
@@ -26,7 +26,7 @@ namespace Orders.Backend.Controllers
             return BadRequest();
         }
         [HttpGet("id")]
-        public virtual async Task<ActionResult>GetAsync(int id)
+        public virtual async Task<IActionResult>GetAsync(int id)
         {
             var action = await _genericUnitOfWork.GetAsync(id);
             if(action.wasSuccess)

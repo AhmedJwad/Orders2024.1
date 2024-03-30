@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Orders.Backend.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using Orders.Backend.UnitsOfWork.Interfaces;
 using Orders.Shared.Entities;
 
@@ -11,9 +8,33 @@ namespace Orders.Backend.Controllers
     [ApiController]
     public class CountriesController : GenericController<Country>
     {
-        public CountriesController(IGenericUnitOfWork<Country> genericUnitOfWork) : base(genericUnitOfWork)
-        {
+        private readonly ICountriesUnitOfWork _countriesUnitOfWork;
 
+        public CountriesController(IGenericUnitOfWork<Country> UnitOfWork, ICountriesUnitOfWork countriesUnitOfWork) : base(UnitOfWork)
+        {
+            _countriesUnitOfWork = countriesUnitOfWork;
+        }
+
+        [HttpGet]
+        public override async Task<IActionResult> GetAsync()
+        {
+            var response = await _countriesUnitOfWork.GetAsync();
+            if (response.wasSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("{id}")]
+        public override async Task<IActionResult> GetAsync(int id)
+        {
+            var response = await _countriesUnitOfWork.GetAsync(id);
+            if (response.wasSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return NotFound(response.Message);
         }
     }
 }

@@ -7,9 +7,9 @@ namespace Orders.frondEnd.Pages.Countries
 {
     public partial class CountriesIndex
     {
-        [Inject] private IRepository Reposotory { get; set; } = null;
-        [Inject] private SweetAlertService SweetAlertService { get; set; } = null;
-        [Inject] private NavigationManager navigationManager { get; set; } = null;
+        [Inject] private IRepository Reposotory { get; set; } = null!;
+        [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
+        [Inject] private NavigationManager navigationManager { get; set; } = null!;
         public List<Country>? countries { get; set; }
 
         protected override async Task OnInitializedAsync()
