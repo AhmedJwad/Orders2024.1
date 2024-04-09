@@ -8,22 +8,21 @@ namespace Orders.Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CitiesController : GenericController<City>
+    public class CategoriesController : GenericController<Category>
     {
-        private readonly ICitiesUnitOfWork _citiesUnitOfWork;
+        private readonly ICategoriesUnitOfWork _categoriesUnitOfWork;
 
-        public CitiesController(IGenericUnitOfWork<City> UnitOfWork , ICitiesUnitOfWork citiesUnitOfWork) : base(UnitOfWork)
+        public CategoriesController(IGenericUnitOfWork<Category> unit, ICategoriesUnitOfWork categoriesUnitOfWork) : base(unit)
         {
-           _citiesUnitOfWork = citiesUnitOfWork;
+           _categoriesUnitOfWork = categoriesUnitOfWork;
         }
-
         [HttpGet]
-        public override async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
+        public override async Task<IActionResult> GetAsync([FromQuery]PaginationDTO pagination)
         {
-            var response = await _citiesUnitOfWork.GetAsync(pagination);
-            if (response.wasSuccess)
+            var response=await _categoriesUnitOfWork.GetAsync(pagination);
+            if(response.wasSuccess)
             {
-                return Ok(response.Result);
+                return Ok (response.Result);
             }
             return BadRequest();
         }
@@ -31,13 +30,13 @@ namespace Orders.Backend.Controllers
         [HttpGet("totalPages")]
         public override async Task<IActionResult> GetPagesAsync([FromQuery] PaginationDTO pagination)
         {
-            var action = await _citiesUnitOfWork.GetTotalPagesAsync(pagination);
+            var action = await _categoriesUnitOfWork.GetTotalPagesAsync(pagination);
             if (action.wasSuccess)
             {
                 return Ok(action.Result);
             }
             return BadRequest();
-        }
 
+        }
     }
 }

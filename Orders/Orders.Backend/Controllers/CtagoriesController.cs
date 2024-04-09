@@ -12,5 +12,6 @@ namespace Orders.Backend.Controllers
         public CtagoriesController(IGenericUnitOfWork<Category> genericUnitOfWork) : base(genericUnitOfWork)
         {
         }
+
     }
 }
