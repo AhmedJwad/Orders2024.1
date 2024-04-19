@@ -27,7 +27,7 @@ namespace Orders.Backend.Repositories.Implementations
               Result=state,
             };
         }
-        [HttpGet("id:int")]
+        
         public override async Task<ActionResponse<State>> GetAsync(int Id)
         {
             var state = await _context.states.Include(x => x.cities).FirstOrDefaultAsync(x => x.Id == Id);

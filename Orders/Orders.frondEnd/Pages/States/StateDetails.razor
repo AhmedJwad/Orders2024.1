@@ -13,8 +13,16 @@ else
         <a class="btn btn-info" href="/countries/details/@state.CountryId">Return</a>
     </div>
     <h4>Cities</h4>
-    <GenericList MyList="@state.cities!.ToList()">
+    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+        <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Search..." @bind-value="Filter" />
+        <button type="button" class="btn btn-outline-primary mx-1" @onclick="ApplyFilterAsync">Filter</button>
+        <button type="button" class="btn btn-outline-danger" @onclick="CleanFilterAsync">clear</button>
+    </div>
+    <GenericList MyList="cities!">
         <body>
+            <Pagination CurrentPage="currentPage"
+                        TotalPages="totalPages"
+                        SelectedPage="SelectedPageAsync" />
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -23,7 +31,7 @@ else
                     </tr>
                 </thead>
                 <tbody>
-                   @foreach (var city in state.cities!)
+                   @foreach (var city in cities!)
                         {
                         <tr>
                             <td>

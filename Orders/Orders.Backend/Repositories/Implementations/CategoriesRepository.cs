@@ -39,11 +39,11 @@ namespace Orders.Backend.Repositories.Implementations
             }
             double count=await queryable.CountAsync();
             var totlaPage = (int)Math.Ceiling(count / pagination.RecordsNumber);
-             return new ActionResponse<int>
-             {
-                 wasSuccess=true,
-                 Result= totlaPage,
-             }
+            return new ActionResponse<int>
+            {
+                wasSuccess = true,
+                Result = totlaPage,
+            };
 
         }
     }

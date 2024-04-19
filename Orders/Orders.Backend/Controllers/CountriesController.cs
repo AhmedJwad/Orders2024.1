@@ -11,7 +11,8 @@ namespace Orders.Backend.Controllers
     {
         private readonly ICountriesUnitOfWork _countriesUnitOfWork;
 
-        public CountriesController(IGenericUnitOfWork<Country> UnitOfWork, ICountriesUnitOfWork countriesUnitOfWork) : base(UnitOfWork)
+        public CountriesController(IGenericUnitOfWork<Country> UnitOfWork,
+            ICountriesUnitOfWork countriesUnitOfWork) : base(UnitOfWork)
         {
             _countriesUnitOfWork = countriesUnitOfWork;
         }
