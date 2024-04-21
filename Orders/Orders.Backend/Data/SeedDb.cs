@@ -2,7 +2,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using Orders.Backend.Services;
+using Orders.Backend.UnitsOfWork.Interfaces;
 using Orders.Shared.Entities;
+using Orders.Shared.Enums;
 using Orders.Shared.Responses;
 
 namespace Orders.Backend.Data
@@ -11,11 +13,13 @@ namespace Orders.Backend.Data
     {
         private readonly DataContext _context;
         private readonly IApiService _apiService;
+        private readonly IUsersUnitOfWork _usersUnitOfWork;
 
-        public SeedDb(DataContext context, IApiService apiService)
+        public SeedDb(DataContext context, IApiService apiService, IUsersUnitOfWork usersUnitOfWork)
         {
            _context = context;
            _apiService = apiService;
+            _usersUnitOfWork = usersUnitOfWork;
         }
 
         public async Task SeedAsync()
@@ -23,10 +27,41 @@ namespace Orders.Backend.Data
            await _context.Database.EnsureCreatedAsync();
            await CheckCountriesAsync();
            await CheckCategoriesAsync();
+            await CheckRolesAsync();
+            await CheckUserAsync( "Ahmed", "Almershady", "Ahmednet380@gmail.com", "+9647804468010", "Iraq/Babylon", UserType.Admin);
+
 
         }
 
-       
+        private async Task<User> CheckUserAsync(string firstName, string lastName, string email, string phone, string Adress, UserType userType)
+        {
+            var user = await _usersUnitOfWork.GetUserAsync(email);
+            if(user == null)
+            {
+                user = new()
+                {
+                    FirstName=firstName,
+                    LastName=lastName,
+                    Email=email,
+                    PhoneNumber=phone,
+                    UserName=email,
+                    Address=Adress,
+                    UserType=userType,
+                    City=_context.cities.FirstOrDefault(),
+                };
+              await  _usersUnitOfWork.AddUserAsync(user, "123456");
+                await _usersUnitOfWork.AddUserToRoleAsync(user, userType.ToString());
+                
+            }
+            return user;
+        }
+
+        private async Task CheckRolesAsync()
+        {
+            await _usersUnitOfWork.CheckRoleAsync(UserType.Admin.ToString());
+            await _usersUnitOfWork.CheckRoleAsync(UserType.User.ToString());
+        }
+
         private async Task CheckCountriesAsync()
         {
             if (!_context.countries.Any())

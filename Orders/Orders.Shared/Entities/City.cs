@@ -16,8 +16,10 @@ namespace Orders.Shared.Entities
         [Required(ErrorMessage = "the field{0}is required")]
         public string Name { get; set; } = null!;
 
-        public int StateId { get; set; }
+        public int StateId { get; set; }      
 
         public State? State { get; set; }
+
+        public ICollection<User>? Users { get; set; }
     }
 }
