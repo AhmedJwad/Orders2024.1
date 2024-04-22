@@ -1,4 +1,5 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
 using Orders.Shared.Entities;
@@ -6,6 +7,8 @@ using System.Diagnostics.Metrics;
 
 namespace Orders.frondEnd.Pages.Categories
 {
+    [Authorize(Roles = "Admin")]
+
     public partial class CategoryIndex
     {
         private int currentPage = 1;

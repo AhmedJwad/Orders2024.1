@@ -18,7 +18,7 @@ namespace Orders.frondEnd.AuthenticationProviders
                 new Claim(ClaimTypes.Name, "Ahmednet380@gmail.com"),
                 new Claim(ClaimTypes.Role, "Admin"),
             }, authenticationType: "test");
-            return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(anonimous)));
+            return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(admin)));
         }
         
     }

@@ -1,4 +1,5 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
 using Orders.Shared.Entities;
@@ -6,6 +7,7 @@ using System.Net;
 
 namespace Orders.frondEnd.Pages.Countries
 {
+    [Authorize(Roles = "Admin")]
     public partial class CountryDetails
     {
         private Country? country;
