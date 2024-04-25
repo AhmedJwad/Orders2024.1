@@ -3,9 +3,19 @@
     <div class="sidebar">
         <NavMenu />
     </div>
-
+   
     <main>
         <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <span>Hello, @context.User.Identity!.Name</span>
+                    <a href="Logout" class="nav-link btn btn-link">Logout</a>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="register" class="nav-link btn btn-link">Register</a>
+                    <a href="Login" class="nav-link btn btn-link">Login</a>
+                </NotAuthorized>
+            </AuthorizeView>
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
 
