@@ -17,6 +17,7 @@ namespace Orders.frondEnd.Pages.Auth
         private List<State>? states;
         private List<City>? cities;
         private bool loading;
+        private string? imageUrl;
 
         [Inject] private NavigationManager navigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
@@ -28,6 +29,11 @@ namespace Orders.frondEnd.Pages.Auth
         {
             await LoadCountriesAsync();
 
+        }
+        private void ImageSelected(string imagenBase64)
+        {
+            userDTO.Photo = imagenBase64;
+            imageUrl = null;
         }
 
         private async Task CountryChangedAsync(ChangeEventArgs e)

@@ -4,16 +4,31 @@
 <div class="mb-3">
     <a class="btn btn-primary" href="/countries/create">New Country</a>
 </div>
-<div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
-    <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Search..." @bind-value="Filter" />
-    <button type="button" class="btn btn-outline-primary mx-1" @onclick="ApplyFilterAsync">Filter</button>
-    <button type="button" class="btn btn-outline-danger" @onclick="CleanFilterAsync">clear</button>
-</div>
 
+<div class="card">
+    <div class="card-header">
+        <span>
+            <i class="bi bi-globe-americas"/> Country
+            <a class="btn btn-primary btn-sm float-end" href="/countries/create"><i class="bi bi-plus-square" /> New Country</a>
+        </span>
+    </div>
+    <div class="card-body">
+        <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+            <div>
+                <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Search..." @bind-value="Filter" />
+            </div>
+            <div class="mx-1">
+                <button type="button" class="btn btn-outline-primary" @onclick="ApplyFilterAsync"><i class="bi bi-funnel" /> Filter</button>
+                <button type="button" class="btn btn-outline-danger" @onclick="CleanFilterAsync"><i class="bi bi-x-circle" /> Clear</button>
+            </div>
+</div>
+</div>
+</div>
 
 <GenericList MyList="countries">
    
     <body>
+
         <Pagination CurrentPage="currentPage"
                     TotalPages="totalPages"
                     SelectedPage="SelectedPageAsync" />
@@ -21,8 +36,8 @@
             <thead>
                 <tr>
                     <th>Countries</th>
-                    <th>States</th>
-                    <th></th>
+                    <th style="width:210px">States</th>
+                    <th style="width:168px"></th>
                 </tr>
             </thead>
             <tbody>
@@ -36,9 +51,9 @@
                             @country.StatesNumber
                         </td>
                         <td>
-                            <a href="/countries/edit/@country.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="/countries/edit/@country.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil" /> Edit</a>
                             <a href="/countries/details/@country.Id" class="btn btn-info btn-sm">Details</a>
-                            <button onclick="@(()=>DeleteAsync(country))" class="btn btn-danger">Delete</button>
+                            <button onclick="@(()=>DeleteAsync(country))" class="btn btn-danger"><i class="bi bi-trash" />Delete</button>
                         </td>
                     </tr>
                 }

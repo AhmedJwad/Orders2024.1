@@ -96,14 +96,7 @@ else
                         <ValidationMessage For="@(() => userDTO.CityId)" />
                     </div>
                 </div>
-
-                <div class="mb-3">
-                    <label>Photo:</label>
-                    <div>
-                        <InputText class="form-control" @bind-Value="@userDTO.Photo" />
-                        <ValidationMessage For="@(() => userDTO.Photo)" />
-                    </div>
-                </div>
+                
                 <div class="mb-3">
                     <label>Password:</label>
                     <div>
@@ -118,6 +111,7 @@ else
                         <ValidationMessage For="@(() => userDTO.PasswordConfirm)" />
                     </div>
                 </div>
+                <InputImg Label="Photo" ImageSelected="@ImageSelected" ImageURL="@imageUrl"/>
             </div>
         </div>
         <button class="btn btn-primary" type="submit">Register</button>
