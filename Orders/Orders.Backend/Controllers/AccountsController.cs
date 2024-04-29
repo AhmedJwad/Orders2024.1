@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Orders.Backend.Helpers;
 using Orders.Backend.UnitsOfWork.Interfaces;
 using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
@@ -17,17 +18,25 @@ namespace Orders.Backend.Controllers
     {
         private readonly IUsersUnitOfWork _usersUnitOfWork;
         private readonly IConfiguration _configuration;
+        private readonly IFileStoragecs _fileStoragecs;
 
-        public AccountsController(IUsersUnitOfWork usersUnitOfWork, IConfiguration configuration)
+        public AccountsController(IUsersUnitOfWork usersUnitOfWork, IConfiguration configuration, IFileStoragecs fileStoragecs)
         {
            _usersUnitOfWork = usersUnitOfWork;
            _configuration = configuration;
+           _fileStoragecs = fileStoragecs;
         }
 
         [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser([FromBody] UserDTO model)
         {
             User user = model;
+            if(!string.IsNullOrEmpty(model.Photo))
+            {
+                var photoUser= Convert.FromBase64String(model.Photo);
+                model.Photo = await _fileStoragecs.SaveFileAsync(photoUser, ".jpg", "users");
+            }
+
             var result = await _usersUnitOfWork.AddUserAsync(user, model.Password);
             if(result.Succeeded)
             {

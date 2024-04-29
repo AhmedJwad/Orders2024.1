@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
-using Orders.Shared.Entities;
+
 using System.Security.Claims;
 
 namespace Orders.frondEnd.AuthenticationProviders
 {
     public class AuthenticationProviderTest : AuthenticationStateProvider
     {
-        public async override Task<AuthenticationState> GetAuthenticationStateAsync()
+        public  override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
            
             var anonimous = new ClaimsIdentity();

@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using Orders.frondEnd.Helpers;
 using Orders.frondEnd.Services;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace Orders.frondEnd.AuthenticationProviders
@@ -22,19 +23,19 @@ namespace Orders.frondEnd.AuthenticationProviders
             _anonimous = new AuthenticationState(new System.Security.Claims.ClaimsPrincipal(new ClaimsIdentity()));
 
         }
-        public async Task<AuthenticationState> GetAuthenticationStateAsync()
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var token = await _jSRuntime.GetLocalStorage(_tokenKey);
             if(token is null)
             {
                 return _anonimous;
             }
-            return BuildAuthenticationState(token.ToString());
+            return BuildAuthenticationState(token.ToString()!);
         }
 
         private AuthenticationState BuildAuthenticationState(string token)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
             var claims = ParseClaimsFromJWT(token);
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt")));
         }

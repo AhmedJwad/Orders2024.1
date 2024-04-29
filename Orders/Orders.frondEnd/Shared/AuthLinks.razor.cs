@@ -6,6 +6,7 @@ namespace Orders.frondEnd.Shared
     public partial class AuthLinks
     {
         private string? photoUser;
+        [Inject] public NavigationManager navigationManager { get; set; } = null!;
 
         [CascadingParameter]
 
@@ -18,7 +19,8 @@ namespace Orders.frondEnd.Shared
             var photoClaim=claim.FirstOrDefault(X=>X.Type== "Photo");
             if(photoClaim is not null)
             {
-                photoUser = photoClaim.Value;
+                var imageName = Path.GetFileName(photoClaim.Value);
+                photoUser = $"{navigationManager.BaseUri}images/users/{imageName}";
             }
 
         }
