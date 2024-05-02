@@ -12,7 +12,7 @@ namespace Orders.frondEnd.Shared
 
         private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnParametersSetAsync()
         {
             var authenticationState = await AuthenticationStateTask;
             var claim= authenticationState.User.Claims.ToList();

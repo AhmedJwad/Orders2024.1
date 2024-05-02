@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Orders.Backend.Helpers;
@@ -45,6 +45,50 @@ namespace Orders.Backend.Controllers
             }
             return BadRequest(result.Errors.FirstOrDefault());
         }
+        [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PutAsync(User user)
+        {
+            try
+            {
+                var currentUser = await _usersUnitOfWork.GetUserAsync(User.Identity!.Name!);
+                if(currentUser  == null)
+                {
+                    return NotFound();
+                }
+                if(!string.IsNullOrEmpty(user.Photo))
+                {
+                    var userPhoto=Convert.FromBase64String(user.Photo);
+                    user.Photo = await _fileStoragecs.SaveFileAsync(userPhoto, ".jpg", "users");
+                }
+                currentUser.FirstName = user.FirstName;
+                currentUser.LastName = user.LastName;
+                currentUser.Photo = !string.IsNullOrEmpty(user.Photo) && user.Photo != currentUser.Photo
+                    ? user.Photo : currentUser.Photo;
+                currentUser.PhoneNumber = user.PhoneNumber;
+                currentUser.Address= user.Address;
+                currentUser.CityId=user.CityId;
+                var result=await _usersUnitOfWork.UpdateUserAsync(currentUser);
+                if(result.Succeeded)
+                {
+                    return Ok(BuildToken(currentUser));
+                }
+                return BadRequest(result.Errors.FirstOrDefault());
+
+            }
+            catch (Exception Ex)
+            {
+
+                return BadRequest(Ex.Message);
+            }
+        }
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetAsync()
+        {
+            return Ok(await _usersUnitOfWork.GetUserAsync(User.Identity!.Name!));
+        }
+
         [HttpPost("Login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginDTO model)
         {

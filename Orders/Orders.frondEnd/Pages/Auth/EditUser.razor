@@ -1,0 +1,107 @@
+﻿@page "/EditUser"
+
+@if (user is null)
+{
+    <Loading />
+}
+else
+{
+    <EditForm Model="user" OnValidSubmit="SaveUserAsync">
+        <DataAnnotationsValidator />
+        <div class="card">
+            <div class="card-header">
+                <span>
+                    <i class="bi bi-person" /> Edit User
+                    <a class="btn btn-sm btn-secondary float-end" href="/changePassword"><i class="bi bi-key" /> Change Password</a>
+                    <button class="btn btn-sm btn-primary float-end mx-2" type="submit"><i class="bi bi-floppy" /> Save</button>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label>First Name:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.FirstName" />
+                                <ValidationMessage For="@(() => user.FirstName)" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>Last Name:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.LastName" />
+                                <ValidationMessage For="@(() => user.LastName)" />
+                            </div>
+                        </div>                       
+                        <div class="mb-3">
+                            <label>Telephone:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.PhoneNumber" />
+                                <ValidationMessage For="@(() => user.PhoneNumber)" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>Address:</label>
+                            <div>
+                                <InputText class="form-control" @bind-Value="@user.Address" />
+                                <ValidationMessage For="@(() => user.Address)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label>Country:</label>
+                            <div>
+                                <select class="form-select" @onchange="CountryChangedAsync">
+                                    <option value="0">-- Select a country--</option>
+                                    @if (countries is not null)
+                                    {
+                                        @foreach (var country in countries)
+                                        {
+                                            <option value="@country.Id" selected="@(country.Id == user.City!.State!.Country!.Id)">@country.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>State:</label>
+                            <div>
+                                <select class="form-select" @onchange="StateChangedAsync">
+                                    <option value="0">-- Select a state/department--</option>
+                                    @if (states is not null)
+                                    {
+                                        @foreach (var state in states)
+                                        {
+                                            <option value="@state.Id" selected="@(state.Id == user.City!.State!.Id)">@state.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>City:</label>
+                            <div>
+                                <select class="form-select" @bind="user.CityId">
+                                    <option value="0">-- Select a city --</option>
+                                    @if (cities is not null)
+                                    {
+                                        @foreach (var city in cities)
+                                        {
+                                            <option value="@city.Id" selected="@(city.Id == user.City!.Id)">@city.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <ValidationMessage For="@(() => user.CityId)" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <InputImg Label="Photo" ImageSelected="ImageSelected" ImageURL="@imageUrl" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+}
+
