@@ -93,7 +93,7 @@ namespace Orders.frondEnd.Pages.Auth
             userDTO.UserType = UserType.User;
             loading = true;
 
-            var responseHttp = await repository.PostAsync<UserDTO, TokenDTO>("/api/accounts/CreateUser", userDTO);
+            var responseHttp = await repository.PostAsync<UserDTO>("/api/accounts/CreateUser", userDTO);
             loading = false;
 
             if (responseHttp.Error)
@@ -102,7 +102,7 @@ namespace Orders.frondEnd.Pages.Auth
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            await loginService.LoginAsync(responseHttp.Response!.Token);
+            await SweetAlertService.FireAsync("Confirmation", "Your account has been successfully created. An email has been sent to you with instructions to activate your user.", SweetAlertIcon.Info);
             navigationManager.NavigateTo("/");
         }
     }

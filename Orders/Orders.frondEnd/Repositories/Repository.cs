@@ -82,5 +82,12 @@ namespace Orders.frondEnd.Repositories
             }
             return new HttpResponseWrapper<TActionResponse>(default, true, responseHttp);
         }
+
+        public async Task<HttpResponseWrapper<object>> GetAsync(string url)
+        {
+            var responseHTTP=await _httpClient.GetAsync(url);
+            return new HttpResponseWrapper<object>(null, !responseHTTP.IsSuccessStatusCode, responseHTTP);
+
+        }
     }
 }

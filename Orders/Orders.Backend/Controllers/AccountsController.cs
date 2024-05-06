@@ -6,6 +6,7 @@ using Orders.Backend.Helpers;
 using Orders.Backend.UnitsOfWork.Interfaces;
 using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
+using Orders.Shared.Responses;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -19,12 +20,15 @@ namespace Orders.Backend.Controllers
         private readonly IUsersUnitOfWork _usersUnitOfWork;
         private readonly IConfiguration _configuration;
         private readonly IFileStoragecs _fileStoragecs;
+        private readonly IMailHelper _mailHelper;
 
-        public AccountsController(IUsersUnitOfWork usersUnitOfWork, IConfiguration configuration, IFileStoragecs fileStoragecs)
+        public AccountsController(IUsersUnitOfWork usersUnitOfWork, IConfiguration configuration, IFileStoragecs fileStoragecs, 
+            IMailHelper mailHelper)
         {
            _usersUnitOfWork = usersUnitOfWork;
            _configuration = configuration;
            _fileStoragecs = fileStoragecs;
+            _mailHelper = mailHelper;
         }
 
         [HttpPost("CreateUser")]
@@ -41,10 +45,48 @@ namespace Orders.Backend.Controllers
             if(result.Succeeded)
             {
                 await _usersUnitOfWork.AddUserToRoleAsync(user, user.UserType.ToString());
+                var response=await SendConfirmationEmailAsync(user);
+
                 return Ok(BuildToken(user));
             }
             return BadRequest(result.Errors.FirstOrDefault());
         }
+
+        private async Task<ActionResponse<string>> SendConfirmationEmailAsync(User user)
+        {
+            var myToken = await _usersUnitOfWork.GenerateEmailConfirmationTokenAsync(user);
+            var tokenLink = Url.Action("ConfirmEmail", "accounts", new
+            {
+                userId = user.Id,
+                token=myToken,
+
+            }, HttpContext.Request.Scheme, _configuration["UrlFrondend"]);
+            return _mailHelper.SendMail(user.FullName, user.Email!,
+                $"Orders - Account Confirmation",
+                $"<h1>Orders - Account Confirmation</h1>" +
+                $"<p>To enable the user, please click 'Confirm Email':</p>" +
+                $"<b><a href ={tokenLink}>Confirmar Email</a></b>");
+
+        }
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmailAsync(string userId, string token)
+        {
+            token = token.Replace(" ", "+");
+            var user = await _usersUnitOfWork.GetUserAsync(new Guid(userId));
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _usersUnitOfWork.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors.FirstOrDefault());
+            }
+
+            return NoContent();
+        }
+
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PutAsync(User user)
@@ -98,6 +140,16 @@ namespace Orders.Backend.Controllers
                 var user = await _usersUnitOfWork.GetUserAsync(model.Email);
                 return Ok(BuildToken(user));
             }
+            if (result.IsLockedOut)
+            {
+                return BadRequest("You have exceeded the maximum number of attempts, your account is blocked, try again in 5 minutes.");
+            }
+
+            if (result.IsNotAllowed)
+            {
+                return BadRequest("The user has not been enabled, you must follow the instructions in the email sent to enable the user.");
+            }
+
 
             return BadRequest("Wrong email or password.");
         }

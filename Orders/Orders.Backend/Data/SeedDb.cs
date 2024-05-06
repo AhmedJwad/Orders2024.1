@@ -38,6 +38,9 @@ namespace Orders.Backend.Data
             var user = await _usersUnitOfWork.GetUserAsync(email);
             if(user == null)
             {
+                var city = await _context.cities.FirstOrDefaultAsync(x => x.Name == "Medellín");
+                city ??= await _context.cities.FirstOrDefaultAsync();
+
                 user = new()
                 {
                     FirstName=firstName,
@@ -47,11 +50,12 @@ namespace Orders.Backend.Data
                     UserName=email,
                     Address=Adress,
                     UserType=userType,
-                    City=_context.cities.FirstOrDefault(),
+                    City=city,
                 };
               await  _usersUnitOfWork.AddUserAsync(user, "123456");
-                await _usersUnitOfWork.AddUserToRoleAsync(user, userType.ToString());
-                
+              await _usersUnitOfWork.AddUserToRoleAsync(user, userType.ToString());
+              var token = await _usersUnitOfWork.GenerateEmailConfirmationTokenAsync(user);
+              await _usersUnitOfWork.ConfirmEmailAsync(user, token);
             }
             return user;
         }
