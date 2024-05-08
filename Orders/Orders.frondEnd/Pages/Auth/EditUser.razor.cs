@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
 using Orders.frondEnd.Services;
+using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
 using System.Net;
 
@@ -121,14 +122,14 @@ namespace Orders.frondEnd.Pages.Auth
         }
         private async Task SaveUserAsync()
         {
-            var responseHttp = await repository.PutAsync<User>("/api/accounts", user!);
+            var responseHttp = await repository.PutAsync<User, TokenDTO>("/api/accounts", user!);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
                 await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-
+            await loginService.LoginAsync(responseHttp.Response!.Token);
             navigationManager.NavigateTo("/");
         }
 

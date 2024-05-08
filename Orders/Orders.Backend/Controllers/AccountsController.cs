@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Orders.Backend.Helpers;
@@ -221,6 +222,51 @@ namespace Orders.Backend.Controllers
             }
             return BadRequest(response.Message);
         }
+        [HttpPost("RecoverPassword")]
+        public async Task<IActionResult> RecoverPasswordAsync([FromBody] EmailDTO model)
+        {
+            var user = await _usersUnitOfWork.GetUserAsync(model.Email);
+            if(user==null)
+            {
+                return NotFound();
+            }
+            var myToken = await _usersUnitOfWork.GeneratePasswordResetTokenAsync(user);
+            var tokenLink = Url.Action("ResetPassword", "accounts", new
+            {
+                userid=user.Id,
+                token=myToken,
+            }, HttpContext.Request.Scheme, _configuration["UrlFrondend"]);
+            var response =  _mailHelper.SendMail(user.FullName, user.Email,
+                $"Orders - Password Recovery",
+                $"<h1>Orders - Password Recovery</h1>" +
+                $"<p>To recover your password, please click 'Recover Password':</p>" +
+                $"<b><a href ={tokenLink}>Recover Password</a></b>");
+            if (response.wasSuccess)
+            {
+                return NoContent();
+            }
+
+            return BadRequest(response.Message);
+
+        }
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPasswordAsync(ResetPasswordDTO model)
+        {
+            var user = await _usersUnitOfWork.GetUserAsync(model.Email);
+            if(user==null)
+            {
+                return NotFound();
+            }
+            var result = await _usersUnitOfWork.ResetPasswordAsync(user, model.Token, model.Password);
+            if (result.Succeeded)
+            {
+                return NoContent();
+            }
+
+            return BadRequest(result.Errors.FirstOrDefault()!.Description);
+
+        }
+
     }
 
 }

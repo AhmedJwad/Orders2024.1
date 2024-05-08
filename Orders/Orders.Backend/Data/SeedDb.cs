@@ -25,11 +25,22 @@ namespace Orders.Backend.Data
         public async Task SeedAsync()
         {
            await _context.Database.EnsureCreatedAsync();
-           await CheckCountriesAsync();
+            //await CheckCountriesFullAsync();
+            await CheckCountriesAsync();
            await CheckCategoriesAsync();
             await CheckRolesAsync();
             await CheckUserAsync( "Ahmed", "Almershady", "Ahmednet380@gmail.com", "+9647804468010", "Iraq/Babylon", UserType.Admin);
 
+
+        }
+
+        private async Task CheckCountriesFullAsync()
+        {
+            if (!_context.countries.Any())
+            {
+                var countriesStatesCitiesSQLScript = File.ReadAllText("Data\\CountriesStatesCities.sql");
+                await _context.Database.ExecuteSqlRawAsync(countriesStatesCitiesSQLScript);
+            }
 
         }
 
