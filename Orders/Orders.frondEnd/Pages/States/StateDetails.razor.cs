@@ -14,7 +14,7 @@ namespace Orders.frondEnd.Pages.States
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
         [Inject] private IRepository repository { get; set; } = null!;
-
+        [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
         [Parameter] public int StateId { get; set; }
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
@@ -24,6 +24,21 @@ namespace Orders.frondEnd.Pages.States
             await LoadAsync();
 
         }
+        private async Task SelectedRecordsNumberAsync(int recordsnumber)
+        {
+            RecordsNumber = recordsnumber;
+            int page = 1;
+            await LoadAsync(page);
+            await SelectedPageAsync(page);
+        }
+        private void ValidateRecordsNumber()
+        {
+            if (RecordsNumber == 0)
+            {
+                RecordsNumber = 10;
+            }
+        }
+
         private async Task SelectedPageAsync(int page)
         {
             if (!string.IsNullOrWhiteSpace(Page))
@@ -51,7 +66,8 @@ namespace Orders.frondEnd.Pages.States
 
         private async Task LoadPagesAsync()
         {
-            var url = $"api/cities/totalPages?id={StateId}";
+            ValidateRecordsNumber();
+            var url = $"api/cities/totalPages?id={StateId}&recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -69,7 +85,8 @@ namespace Orders.frondEnd.Pages.States
 
         private async Task<bool> LoadCitiesAsync(int page)
         {
-            var url = $"api/cities?id={StateId}&page={page}";
+            ValidateRecordsNumber();
+            var url = $"api/cities?id={StateId}&page={page}&recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -154,6 +171,12 @@ namespace Orders.frondEnd.Pages.States
             int page = 1;
             await LoadAsync(page);
             await SelectedPageAsync(page);
+        }
+        private async Task FilterCallBack(string filter)
+        {
+            Filter = filter;
+            await ApplyFilterAsync();
+            StateHasChanged();
         }
 
     }

@@ -18,7 +18,7 @@ namespace Orders.frondEnd.Pages.Countries
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
-
+        [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
 
@@ -39,7 +39,13 @@ namespace Orders.frondEnd.Pages.Countries
             currentPage = page;
             await LoadAsync(page);
         }
-
+        private async Task SelectedRecordsNumberAsync(int recordsnumber)
+        {
+            RecordsNumber = recordsnumber;
+            int page = 1;
+            await LoadAsync(page);
+            await SelectedPageAsync(page);
+        }
         private async Task LoadAsync(int page = 1)
         {
            
@@ -55,10 +61,17 @@ namespace Orders.frondEnd.Pages.Countries
 
            
         }
-        
+        private void ValidateRecordsNumber()
+        {
+            if (RecordsNumber == 0)
+            {
+                RecordsNumber = 10;
+            }
+        }
         private async Task LoadPagesAsync()
         {
-            var url = $"/api/states/totalPages?Id={CountryId}";
+            ValidateRecordsNumber();
+            var url = $"api/States/totalPages?Id={CountryId}&RecordsNumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -76,8 +89,8 @@ namespace Orders.frondEnd.Pages.Countries
 
         private async Task<bool> LoadStatesAsync(int page)
         {
-            
-            var url = $"api/states?Id={CountryId}&Page={page}";
+            ValidateRecordsNumber();
+            var url = $"api/states?Id={CountryId}&Page={page}&RecordsNumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -166,5 +179,12 @@ namespace Orders.frondEnd.Pages.Countries
             country = responseHttp.Response;
             return true;
         }
+        private async Task FilterCallBack(string filter)
+        {
+            Filter = filter;
+            await ApplyFilterAsync();
+            StateHasChanged();
+        }
+
     }
 }

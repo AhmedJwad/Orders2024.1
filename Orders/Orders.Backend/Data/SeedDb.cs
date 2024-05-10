@@ -147,25 +147,156 @@ namespace Orders.Backend.Data
                        new State()
                         {
                             Name = "Baghdad",
-                            cities = [
-                                new() { Name = "Almonsour" },
-                                new() { Name = "Alkarda" },
-                                new() { Name = "he Abonk" },
-                                new() { Name = "Aldora" },
-                                new() { Name = "Aljama" },
-                                new() { Name = "Alaadhama" },
+                            cities = [                               
+                                new City { Name = "Al-Adel" },
+                                new City { Name = "Al-Amal" },
+                                new City { Name = "Al-Amin" },
+                                new City { Name = "Al-Baiyaa" },
+                                new City { Name = "Al-Baladiyat" },
+                                new City { Name = "Al-Bayaa" },
+                                new City { Name = "Al-Binook" },
+                                new City { Name = "Al-Dora" },
+                                new City { Name = "Al-Furat" },
+                                new City { Name = "Al-Furat Al-Awsat" },
+                                new City { Name = "Al-Ghazaliyah" },
+                                new City { Name = "Al-Habibiyah" },
+                                new City { Name = "Al-Hurriya" },
+                                new City { Name = "Al-Ilam" },
+                                new City { Name = "Al-Jadida" },
+                                new City { Name = "Al-Kadhimiya" },
+                                new City { Name = "Al-Karrada" },
+                                new City { Name = "Al-Khudra" },
+                                new City { Name = "Al-Kifah" },
+                                new City { Name = "Al-Mada'in" },
+                                new City { Name = "Al-Mansour" },
+                                new City { Name = "Al-Mashtal" },
+                                new City { Name = "Al-Ma'moun" },
+                                new City { Name = "Al-Muthanna" },
+                                new City { Name = "Al-Nahda" },
+                                new City { Name = "Al-Nidhal" },
+                                new City { Name = "Al-Rahmaniya" },
+                                new City { Name = "Al-Rasheed" },
+                                new City { Name = "Al-Risala" },
+                                new City { Name = "Al-Saadoun" },
+                                new City { Name = "Al-Sadr City" },
+                                new City { Name = "Al-Salhiyah" },
+                                new City { Name = "Al-Saydiyah" },
+                                new City { Name = "Al-Shaab" },
+                                new City { Name = "Al-Sho'ala" },
+                                new City { Name = "Al-Sulaikh" },
+                                new City { Name = "Al-Thawra" },
+                                new City { Name = "Al-Waziriya" },
+                                new City { Name = "Bab Al-Muadham" },
+                                new City { Name = "Bab Al-Sharqi" },
+                                new City { Name = "Hayy Al-Andalus" },
+                                new City { Name = "Hayy Al-Amel" },
+                                new City { Name = "Hayy Al-Amin" },
+                                new City { Name = "Hayy Al-Bakr" },
+                                new City { Name = "Hayy Al-Dhahir" },
+                                new City { Name = "Hayy Al-Furat" },
+                                new City { Name = "Hayy Al-Ghadeer" },
+                                new City { Name = "Hayy Al-Hartha" },
+                                new City { Name = "Hayy Al-Hurriya" },
+                                new City { Name = "Hayy Al-Jihad" },
+                                new City { Name = "Hayy Al-Jihad Al-Islami" },
+                                new City { Name = "Hayy Al-Karakh" },
+                                new City { Name = "Hayy Al-Karkh" },
+                                new City { Name = "Hayy Al-Maalif" },
+                                new City { Name = "Hayy Al-Mahdi" },
+                                new City { Name = "Hayy Al-Mashtal" },
+                                new City { Name = "Hayy Al-Mua'alimin" },
+                                new City { Name = "Hayy Al-Muallimin" },
+                                new City { Name = "Hayy Al-Muhandisin" },
+                                new City { Name = "Hayy Al-Mujahidin" },
+                                new City { Name = "Hayy Al-Murur" },
+                                new City { Name = "Hayy Al-Nahdha" },
+                                new City { Name = "Hayy Al-Qadiriya" },
+                                new City { Name = "Hayy Al-Qadisiya" },
+                                new City { Name = "Hayy Al-Qanat" },
+                                new City { Name = "Hayy Al-Rashid" },
+                                new City { Name = "Hayy Al-Sadeer" },
+                                new City { Name = "Hayy Al-Sarai" },
+                                new City { Name = "Hayy Al-Saydiyah" },
+                                new City { Name = "Hayy Al-Shoula" },
+                                new City { Name = "Hayy Al-Suwaib" },
+                                new City { Name = "Hayy Al-Taji" },
+                                new City { Name = "Hayy Al-Tayaran" },
+                                new City { Name = "Hayy Al-Yarmouk" },
+                                new City { Name = "Hayy Al-Zayuna" },
+                                new City { Name = "Hayy Al-Zuhur" },
+                                new City { Name = "Hayy Amin" },
+                                new City { Name = "Hayy Arab Jabour" },
+                                new City { Name = "Hayy As-Salam" },
+                                new City { Name = "Hayy Attar" },
+                                new City { Name = "Hayy Babil" },
+                                new City { Name = "Hayy Fadl" },
+                                new City { Name = "Hayy Jameela" },
+                                new City { Name = "Hayy Karrada" },
+                                new City { Name = "Hayy Malikiya" },
+                                new City { Name = "Hayy Salman" },
+                                new City { Name = "Hayy Shorja" },
+                                new City { Name = "Hayy Ur" },
+                                new City { Name = "Kadhimiya" },
+                                new City { Name = "Madinat Al-Sadr" },
+                                new City { Name = "Masbah" },
+                                new City { Name = "New Baghdad" },
+                                new City { Name = "Old Baghdad" },
+                                new City { Name = "Sadr City" },
+                                new City { Name = "Tayaran" }
                             ]
+                        },
+                       new State()
+                        {
+                            Name = "Al Anbar",
+                           cities = new List<City>
+                            {
+                                new City { Name = "Ramadi" },
+                                new City { Name = "Fallujah" },
+                                new City { Name = "Haditha" },
+                                new City { Name = "Hit" },
+                                new City { Name = "Rawa" },
+                                // Add more cities as needed
+                            }
                         },
                         new State()
                         {
-                            Name = "babil",
-                           cities = [
-                                new() { Name = "Alkaram" },
-                                new() { Name = "hey Alhussein" },
-                                new() { Name = "Aljameaa" },
-                                new() { Name = "40 street" },
-                                new() { Name = "60 street" },
-                            ]
+                            Name = "Al Basrah",
+                            cities = new List<City>
+                            {
+                                new City { Name = "Basra" },
+                                new City { Name = "Umm Qasr" },
+                                new City { Name = "Al-Zubair" },
+                                new City { Name = "Shatt al-Arab" },
+                                new City { Name = "Al-Faw" },
+                                // Add more cities as needed
+                            }
+                        },
+                        new State()
+                        {
+                            Name = "Al Muthanna",
+                            cities = new List<City>
+                            {
+                                new City { Name = "Samawah" },
+                                new City { Name = "Al-Rumaytha" },
+                                new City { Name = "Al-Khidhir" },
+                                new City { Name = "Al-Qasim" },
+                                new City { Name = "Al-Diwaniyah" },
+                                // Add more cities as needed
+                            }
+                        },
+                        // Add more states and their cities here
+                        new State()
+                        {
+                            Name = "Babil",
+                            cities = new List<City>
+                            {
+                                new City { Name = "Alkaram" },
+                                new City { Name = "hey Alhussein" },
+                                new City { Name = "Aljameaa" },
+                                new City { Name = "40 street" },
+                                new City { Name = "60 street" },
+                                // Add more cities as needed
+                            }
                         },
                     ]
                 });

@@ -17,6 +17,8 @@ namespace Orders.frondEnd.Pages.Countries
         [Inject] private NavigationManager navigationManager { get; set; } = null!;
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+        [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
+
 
         public List<Country>? countries { get; set; }
 
@@ -46,7 +48,9 @@ namespace Orders.frondEnd.Pages.Countries
 
         private async Task LoadPagesAsync()
         {
-            var url = "api/Countries/totalPages";
+            ValidateRecordsNumber(RecordsNumber);
+            var url = $"api/Countries/totalPages?recordsnumber={RecordsNumber}";
+
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"?filter={Filter}";
@@ -65,7 +69,9 @@ namespace Orders.frondEnd.Pages.Countries
 
         private async Task<bool> LoadListAsync(int page)
         {
-            var url = $"/api/Countries?page={page}";
+            ValidateRecordsNumber(RecordsNumber);
+            var url = $"api/countries?page={page}&recordsnumber={RecordsNumber}";
+
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -78,6 +84,13 @@ namespace Orders.frondEnd.Pages.Countries
             }
             countries = responseHttp.Response;
             return true;
+        }
+        private void ValidateRecordsNumber(int recordsnumber)
+        {
+            if (recordsnumber == 0)
+            {
+                RecordsNumber = 10;
+            }
         }
 
         private async Task DeleteAsync(Country country)
@@ -125,6 +138,19 @@ namespace Orders.frondEnd.Pages.Countries
 
         private async Task ApplyFilterAsync()
         {
+            int page = 1;
+            await LoadAsync(page);
+            await SelectedPageAsync(page);
+        }
+        private async Task FilterCallBack(string filter)
+        {
+            Filter = filter;
+            await ApplyFilterAsync();
+            StateHasChanged();
+        }
+        private async Task SelectedRecordsNumberAsync(int recordsnumber)
+        {
+            RecordsNumber = recordsnumber;
             int page = 1;
             await LoadAsync(page);
             await SelectedPageAsync(page);

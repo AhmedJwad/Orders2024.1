@@ -17,7 +17,8 @@ namespace Orders.frondEnd.Pages.Categories
         [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager navigationManager { get; set; } = null!;
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
-        [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;       
+        [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+        [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
 
         public List<Category>? Categories { get; set; }
 
@@ -31,6 +32,13 @@ namespace Orders.frondEnd.Pages.Categories
           
             currentPage = page;
             await LoadAsync(page);
+        }
+        private void ValidateRecordsNumber()
+        {
+            if (RecordsNumber == 0)
+            {
+                RecordsNumber = 10;
+            }
         }
         private async Task LoadAsync(int page = 1)
         {
@@ -48,7 +56,8 @@ namespace Orders.frondEnd.Pages.Categories
         }
         private async Task LoadPagesAsync()
         {
-            var url = $"api/Categories/totalPages";
+            ValidateRecordsNumber();
+            var url = $"api/Categories/totalPages?recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"?filter={Filter}";
@@ -65,7 +74,8 @@ namespace Orders.frondEnd.Pages.Categories
         }
         private async Task<bool> LoadListAsync(int page)
         {
-            var url = $"api/Categories?Page={page}";
+            ValidateRecordsNumber();
+            var url = $"api/Categories?Page={page}&recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -129,6 +139,19 @@ namespace Orders.frondEnd.Pages.Categories
 
         private async Task ApplyFilterAsync()
         {
+            int page = 1;
+            await LoadAsync(page);
+            await SelectedPageAsync(page);
+        }
+        private async Task FilterCallBack(string filter)
+        {
+            Filter = filter;
+            await ApplyFilterAsync();
+            StateHasChanged();
+        }
+        private async Task SelectedRecordsNumberAsync(int recordsnumber)
+        {
+            RecordsNumber = recordsnumber;
             int page = 1;
             await LoadAsync(page);
             await SelectedPageAsync(page);
