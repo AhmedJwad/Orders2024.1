@@ -4,7 +4,7 @@
 
 
 <div class="mb-3">
-    <a class="btn btn-primary" href="/Category/Create">New Category</a>
+    <a class="btn btn-primary" @onclick=@(()=>ShowModalAsync()) >New Category</a>
 </div>
 
 
@@ -31,7 +31,7 @@
                             @category.Name
                         </td>
                         <td>
-                            <a href="/category/edit/@category.Id" class="btn btn-warning">Edit</a>
+                            <a @onclick=@(()=>ShowModalAsync(category.Id, true)) class="btn btn-warning">Edit</a>
                             <button onclick="@(()=>DeleteAsync(category))" class="btn btn-danger">Delete</button>
                         </td>
                     </tr>

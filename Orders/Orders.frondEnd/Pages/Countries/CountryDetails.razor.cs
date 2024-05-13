@@ -1,6 +1,9 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Orders.frondEnd.Pages.States;
 using Orders.frondEnd.Repositories;
 using Orders.Shared.Entities;
 using System.Net;
@@ -21,6 +24,7 @@ namespace Orders.frondEnd.Pages.Countries
         [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         [Parameter]
         public int CountryId { get; set; }
@@ -185,6 +189,24 @@ namespace Orders.frondEnd.Pages.Countries
             await ApplyFilterAsync();
             StateHasChanged();
         }
+        private async Task ShowModalAsync(int id = 0, bool isEdit = false)
+        {
+            IModalReference modalReference;
 
+            if (isEdit)
+            {
+                modalReference = Modal.Show<StateEdit>(string.Empty, new ModalParameters().Add("StateId", id));
+            }
+            else
+            {
+                modalReference = Modal.Show<StateCreate>(string.Empty, new ModalParameters().Add("CountryId", CountryId));
+            }
+
+            var result = await modalReference.Result;
+            if (result.Confirmed)
+            {
+                await LoadAsync();
+            }
+        }
     }
 }

@@ -15,6 +15,6 @@
     </Authorized>
     <NotAuthorized>
         <a href="register" class="nav-link btn btn-link">Register</a>
-        <a href="Login" class="nav-link btn btn-link">Login</a>
+        <a @onclick=@(() => ShowModal()) class="nav-link btn btn-link">Login</a>
     </NotAuthorized>
 </AuthorizeView>

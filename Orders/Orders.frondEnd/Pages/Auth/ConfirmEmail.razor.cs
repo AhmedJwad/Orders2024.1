@@ -1,4 +1,5 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
+﻿using Blazored.Modal.Services;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
 
@@ -14,6 +15,7 @@ namespace Orders.frondEnd.Pages.Auth
 
         [Parameter, SupplyParameterFromQuery] public string UserId { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Token { get; set; } = string.Empty;
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected async Task ConfirmAccountAsync()
         {
@@ -26,8 +28,11 @@ namespace Orders.frondEnd.Pages.Auth
                 return;
             }
 
-            await sweetAlertService.FireAsync("Confirmation", "Thank you for confirming your email, now you can log in to the system.", SweetAlertIcon.Info);
-            navigationManager.NavigateTo("/Login");
+            await sweetAlertService.FireAsync("Confirmation", 
+                "Thank you for confirming your email, now you can log in to the system.",
+                SweetAlertIcon.Info);
+            Modal.Show<Login>();
+
 
         }
 

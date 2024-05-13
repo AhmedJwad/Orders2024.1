@@ -1,60 +1,45 @@
 ﻿@page "/countries"
 
-<h3>Countries Index</h3>
-<div class="mb-3">
-    <a class="btn btn-primary" href="/countries/create">New Country</a>
-</div>
-
 <div class="card">
     <div class="card-header">
         <span>
-            <i class="bi bi-globe-americas"/> Country
-            <a class="btn btn-primary btn-sm float-end" href="/countries/create"><i class="bi bi-plus-square" /> New Country</a>
+            <i class="bi bi-globe-americas" /> Country
+            <a class="btn btn-primary btn-sm float-end" @onclick=@(() => ShowModalAsync())><i class="bi bi-plus-square" /> New Country</a>
         </span>
     </div>
     <div class="card-body">
         <Filter PlaceHolder="Search..." Callback=@FilterCallBack />
+        <GenericList MyList="countries">
+            <body>
+                <Pagination CurrentPage="currentPage"
+                            TotalPages="totalPages"
+                            SelectedPage="SelectedPageAsync"
+                            RecordsNumber="SelectedRecordsNumberAsync" />
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Country</th>
+                            <th style="width:210px">States</th>
+                            <th style="width:168px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var country in countries!)
+                        {
+                            <tr>
+                                <td><a href="/countries/details/@country.Id"> @country.Name</a></td>
+                                <td>@country.StatesNumber</td>
+                                <td>
+                                    <a @onclick=@(() => ShowModalAsync(country.Id, true)) class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Edit</a>
+                                    <button @onclick=@(() => DeleteAsync(country)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </body>
+        </GenericList>
+    </div>
 </div>
-</div>
-
-
-<GenericList MyList="countries">
-   
-    <body>
-
-        <Pagination CurrentPage="currentPage"
-                    TotalPages="totalPages"
-                    SelectedPage="SelectedPageAsync" 
-                    RecordsNumber="SelectedRecordsNumberAsync" />
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Countries</th>
-                    <th style="width:210px">States</th>
-                    <th style="width:168px"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var country in countries!)
-                {
-                    <tr>
-                        <td>
-                            @country.Name
-                        </td>
-                        <td>
-                            @country.StatesNumber
-                        </td>
-                        <td>
-                            <a href="/countries/edit/@country.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil" /> Edit</a>
-                            <a href="/countries/details/@country.Id" class="btn btn-info btn-sm">Details</a>
-                            <button onclick="@(()=>DeleteAsync(country))" class="btn btn-danger"><i class="bi bi-trash" />Delete</button>
-                        </td>
-                    </tr>
-                }
-
-            </tbody>
-
-        </table>
-    </body>
-</GenericList>
 

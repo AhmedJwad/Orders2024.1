@@ -1,49 +1,53 @@
 ﻿@page "/states/details/{StateId:int}"
 
 
-@if(state is null)
+@if (state is null)
 {
-    <Loading/>
+    <Loading />
 }
 else
 {
-    <h3>@state.Name</h3>
-    <div class="mb-2">
-        <a class="btn btn-primary" href="/cities/create/@StateId">Create</a>
-        <a class="btn btn-info" href="/countries/details/@state.CountryId">Return</a>
-    </div>
-    <h4>Cities</h4>
-    <Filter PlaceHolder="Search..." Callback=@FilterCallBack />
-    <GenericList MyList="cities!">
-        <body>
-            <Pagination CurrentPage="currentPage"
-                        TotalPages="totalPages"
-                        SelectedPage="SelectedPageAsync" 
-                        RecordsNumber="SelectedRecordsNumberAsync"/>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>City</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                   @foreach (var city in cities!)
-                        {
-                        <tr>
-                            <td>
-                                @city.Name
-                            </td>
-                            <td>
-                                <a class="btn btn-warning btn-sm" href="/cities/edit/@city.Id">Edit</a>
-                                <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(city))>Delete</button>
+    <div class="card">
+        <div class="card-header">
+            <span>
+                <i class="bi bi-globe-americas" /> @state.Name
+                <a class="btn btn-sm btn-primary float-end mx-1" @onclick=@(() => ShowModalAsync())><i class="bi bi-plus-square"></i> Add City</a>
+                <a class="btn btn-sm btn-success float-end" href="/countries/details/@state.CountryId"><i class="bi bi-arrow-left" /> Return</a>
+            </span>
+        </div>
+        <div class="card-body">
+            <Filter PlaceHolder="Search..." Callback=@FilterCallBack />
+            <GenericList MyList="cities!">
+                <body>
+                    <Pagination CurrentPage="currentPage"
+                                TotalPages="totalPages"
+                                SelectedPage="SelectedPageAsync"
+                                RecordsNumber="SelectedRecordsNumberAsync" />
 
-                            </td>
-                        </tr>
-                    
-                        }
-                </tbody>
-            </table>
-        </body>
-    </GenericList>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>City</th>
+                                <th style="width:168px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var city in cities!)
+                            {
+                                <tr>
+                                    <td>
+                                        @city.Name
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-warning btn-sm" @onclick=@(() => ShowModalAsync(city.Id, true))><i class="bi bi-pencil" /> Edit</a>
+                                        <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(city))><i class="bi bi-trash" /> Delete</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </body>
+            </GenericList>
+        </div>
+    </div>
 }

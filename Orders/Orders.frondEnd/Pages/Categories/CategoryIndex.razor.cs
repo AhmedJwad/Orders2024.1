@@ -1,4 +1,6 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
@@ -19,6 +21,7 @@ namespace Orders.frondEnd.Pages.Categories
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         public List<Category>? Categories { get; set; }
 
@@ -29,7 +32,10 @@ namespace Orders.frondEnd.Pages.Categories
         }
         private async Task SelectedPageAsync(int page)
         {
-          
+            if (!string.IsNullOrWhiteSpace(Page))
+            {
+                page = Convert.ToInt32(Page);
+            }
             currentPage = page;
             await LoadAsync(page);
         }
@@ -42,11 +48,7 @@ namespace Orders.frondEnd.Pages.Categories
         }
         private async Task LoadAsync(int page = 1)
         {
-            if (!string.IsNullOrWhiteSpace(Page))
-            {
-                page = Convert.ToInt32(Page);
-            }
-
+            
             var ok = await LoadListAsync(page);
             if (ok)
             {
@@ -57,7 +59,7 @@ namespace Orders.frondEnd.Pages.Categories
         private async Task LoadPagesAsync()
         {
             ValidateRecordsNumber();
-            var url = $"api/Categories/totalPages?recordsnumber={RecordsNumber}";
+            var url = $"api/Categories/totalPages?RecordsNumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"?filter={Filter}";
@@ -75,7 +77,7 @@ namespace Orders.frondEnd.Pages.Categories
         private async Task<bool> LoadListAsync(int page)
         {
             ValidateRecordsNumber();
-            var url = $"api/Categories?Page={page}&recordsnumber={RecordsNumber}";
+            var url = $"api/Categories?Page={page}&RecordsNumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -107,12 +109,12 @@ namespace Orders.frondEnd.Pages.Categories
                 });
             var confirm = string.IsNullOrEmpty(result.Value);
             if (confirm) { return; }
-            var responseHttp = await repository.DeleteAsync<Category>($"/api/Ctagories/id?id={category.Id}");
+            var responseHttp = await repository.DeleteAsync<Category>($"api/Categories/id?id={category.Id}");
             if (responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    navigationManager.NavigateTo("/Categories");
+                    navigationManager.NavigateTo("/categories");
                 }
                 else
                 {
@@ -121,7 +123,7 @@ namespace Orders.frondEnd.Pages.Categories
                 }
                 return;
             }
-            await LoadAsync();
+           
             var toast = sweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
@@ -130,6 +132,7 @@ namespace Orders.frondEnd.Pages.Categories
                 Timer = 3000,
             });
             await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Log successfully deleted");
+            await LoadAsync();
         }
         private async Task CleanFilterAsync()
         {
@@ -155,6 +158,25 @@ namespace Orders.frondEnd.Pages.Categories
             int page = 1;
             await LoadAsync(page);
             await SelectedPageAsync(page);
+        }
+
+        private async Task ShowModalAsync(int id = 0, bool isEdit = false)
+        {
+            IModalReference modalReference;
+
+            if(isEdit)
+            {
+                modalReference = Modal.Show<CategoryEdit>(string.Empty, new ModalParameters().Add("id", id));
+            }
+            else
+            {
+                modalReference = Modal.Show<CategoryCreate>();
+            }
+            var Result = await modalReference.Result;
+            if(Result.Confirmed)
+            {
+               await LoadAsync();
+            }
         }
     }
 }

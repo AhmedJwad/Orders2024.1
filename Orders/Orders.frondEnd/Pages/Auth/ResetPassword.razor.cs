@@ -1,4 +1,5 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
+﻿using Blazored.Modal.Services;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
 using Orders.Shared.DTOs;
@@ -14,6 +15,7 @@ namespace Orders.frondEnd.Pages.Auth
         [Inject] private IRepository repository { get; set; } = null!;
 
         [Parameter, SupplyParameterFromQuery] public string Token { get; set; } = string.Empty;
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         private async Task ChangePasswordAsync()
         {
@@ -30,7 +32,8 @@ namespace Orders.frondEnd.Pages.Auth
             }
 
             await sweetAlertService.FireAsync("Confirmation", "Password successfully changed, you can now log in with your new password.", SweetAlertIcon.Info);
-            navigationManager.NavigateTo("/Login");
+            Modal.Show<Login>();
+
 
         }
 

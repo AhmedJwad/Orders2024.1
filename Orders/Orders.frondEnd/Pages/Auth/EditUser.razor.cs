@@ -1,4 +1,5 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
+﻿using Blazored.Modal.Services;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
 using Orders.frondEnd.Services;
@@ -20,6 +21,7 @@ namespace Orders.frondEnd.Pages.Auth
         [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
         [Inject] private IRepository repository { get; set; }=null!;
         [Inject] private ILoginService loginService { get; set; } = null!;
+        [CascadingParameter] IModalService Modal { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -131,6 +133,10 @@ namespace Orders.frondEnd.Pages.Auth
             }
             await loginService.LoginAsync(responseHttp.Response!.Token);
             navigationManager.NavigateTo("/");
+        }
+        private void ShowModal()
+        {
+            Modal.Show<ChangePassword>();
         }
 
     }

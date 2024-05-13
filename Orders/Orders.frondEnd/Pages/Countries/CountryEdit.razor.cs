@@ -1,4 +1,6 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
@@ -19,10 +21,10 @@ namespace Orders.frondEnd.Pages.Countries
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null;
         [Inject] private NavigationManager navigationManager { get; set; } = null;
         [EditorRequired , Parameter] public int Id { get; set; }
-
+        [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
         protected override async Task OnParametersSetAsync()
         {
-            var responseHttp = await Repository.GetASync<Country>($"/api/Countries/id?id={Id}");
+            var responseHttp = await Repository.GetASync<Country>($"/api/Countries/{Id}");
             if(responseHttp.Error)
             {
                 if(responseHttp.HttpResponseMessage.StatusCode==System.Net.HttpStatusCode.NotFound)
@@ -52,7 +54,9 @@ namespace Orders.frondEnd.Pages.Countries
                 return;
             }
 
+            await BlazoredModal.CloseAsync(ModalResult.Ok());
             Return();
+
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,

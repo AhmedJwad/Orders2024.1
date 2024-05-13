@@ -1,4 +1,6 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Orders.frondEnd.Repositories;
@@ -18,10 +20,10 @@ namespace Orders.frondEnd.Pages.Categories
         [Inject] private SweetAlertService sweetAlertService { get; set; } = null;
         [Inject] private NavigationManager navigationManager { get; set; } = null;
         [EditorRequired, Parameter]public int id { get; set; }
-
+        [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
         protected override async Task OnParametersSetAsync()
         {
-            var responseHttp = await repository.GetASync<Category>($"/api/Ctagories/id?id={id}");
+            var responseHttp = await repository.GetASync<Category>($"/api/Categories/id?id={id}");
             if(responseHttp.Error)
             {
                 if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
@@ -41,14 +43,14 @@ namespace Orders.frondEnd.Pages.Categories
         }
         private async Task EditAsync()
         {
-            var resposeHttp = await repository.PutAsync($"/api/Ctagories", category);
+            var resposeHttp = await repository.PutAsync($"/api/Categories", category);
             if(resposeHttp.Error)
             {
                 var message = await resposeHttp.GetErrorMessageAsync();
                 await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            Return();
+           
             var toast = sweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
@@ -56,13 +58,16 @@ namespace Orders.frondEnd.Pages.Categories
                 ShowConfirmButton = true,
                 Timer = 3000
             });
-           await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Changes saved successfully.");
+            await BlazoredModal.CloseAsync(ModalResult.Ok());
+            Return();
+            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Changes saved successfully.");
         }
+        
 
         private void Return()
         {
-            categoryForm.FormPostedSuccessfully = true;
-            navigationManager.NavigateTo("/Categories");
+            categoryForm!.FormPostedSuccessfully = true;
+            navigationManager.NavigateTo("/categories");
         }
     }
 }

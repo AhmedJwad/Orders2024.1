@@ -1,16 +1,17 @@
 ﻿@page "/Login"
 
-<div class="row mt-5">
-    <div class="col-md-4 offset-md-4">
+<div class="row">
+    <div class="col-12">
 
         <EditForm Model="loginDTO" OnValidSubmit="LoginAsync">
-            <DataAnnotationsValidator />
-
+            <DataAnnotationsValidator/>
             <div class="card bg-light">
                 <div class="card-header justify-content-center">
                     <span>
                         <i class="oi oi-account-login" /> Log in
-                        <button class="btn btn-sm btn-primary float-end" type="submit"><i class="bi bi-box-arrow-in-right" /> Log in</button>
+                        <button class="btn btn-sm btn-primary float-end" @onclick=@(() => LoginAsync())><i class="bi bi-box-arrow-in-right" /> Log in</button>
+                        <button class="btn btn-sm mx-1 btn-danger float-end" @onclick=@(() => CloseModalAsync())><i class="bi bi-x-circle-fill" /> Close</button>
+
                     </span>
                 </div>
                 <div class="card-body">
@@ -30,6 +31,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
+                    <p><a class="btn btn-link" href="/Register">Not a user yet? Register here</a></p>
                     <p><a class="btn btn-link" href="/ResendToken">Resend account activation email</a></p>
                     <p><a class="btn btn-link" href="/RecoverPassword">have you forgotten your password?</a></p>
                 </div>
