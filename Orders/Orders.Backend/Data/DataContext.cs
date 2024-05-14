@@ -14,12 +14,16 @@ namespace Orders.Backend.Data
         public DbSet<Category> categories{ get; set; }
         public DbSet<State> states { get; set; }
         public DbSet<City> cities { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Country>().HasIndex(country => country.Name).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(x=>x.Name).IsUnique();
+            modelBuilder.Entity<Product>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<State>().HasIndex(state => state.Name).IsUnique();
             modelBuilder.Entity<City>().HasIndex(city =>city.Name).IsUnique();
             DisableCascadingDelete(modelBuilder);

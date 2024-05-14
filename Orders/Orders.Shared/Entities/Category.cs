@@ -16,5 +16,10 @@ namespace Orders.Shared.Entities
         [MaxLength(100, ErrorMessage = "The field {0} cannot be more than {1} characters.")]
         [Required(ErrorMessage = "The field {0} is required.")]
         public string Name { get; set; } = null!;
+        public ICollection<ProductCategory>? ProductCategories { get; set; }
+
+        [Display(Name = "Products")]
+        public int ProductCategoriesNumber => ProductCategories == null || ProductCategories.Count == 0 ? 0 : ProductCategories.Count;
+
     }
 }

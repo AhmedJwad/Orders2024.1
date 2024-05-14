@@ -29,4 +29,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\users\" />
+    <Folder Include="Images\products\" />
+  </ItemGroup>
+
 </Project>

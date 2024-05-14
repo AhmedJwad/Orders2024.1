@@ -1,11 +1,13 @@
 ﻿
 
 using Microsoft.EntityFrameworkCore;
+using Orders.Backend.Helpers;
 using Orders.Backend.Services;
 using Orders.Backend.UnitsOfWork.Interfaces;
 using Orders.Shared.Entities;
 using Orders.Shared.Enums;
 using Orders.Shared.Responses;
+using System;
 
 namespace Orders.Backend.Data
 {
@@ -14,12 +16,15 @@ namespace Orders.Backend.Data
         private readonly DataContext _context;
         private readonly IApiService _apiService;
         private readonly IUsersUnitOfWork _usersUnitOfWork;
+        private readonly IFileStoragecs _fileStorage;
 
-        public SeedDb(DataContext context, IApiService apiService, IUsersUnitOfWork usersUnitOfWork)
+        public SeedDb(DataContext context, IApiService apiService, IUsersUnitOfWork usersUnitOfWork, IFileStoragecs
+            fileStorage)
         {
            _context = context;
            _apiService = apiService;
             _usersUnitOfWork = usersUnitOfWork;
+            _fileStorage = fileStorage;
         }
 
         public async Task SeedAsync()
@@ -29,7 +34,19 @@ namespace Orders.Backend.Data
             await CheckCountriesAsync();
            await CheckCategoriesAsync();
             await CheckRolesAsync();
-            await CheckUserAsync( "Ahmed", "Almershady", "Ahmednet380@gmail.com", "+9647804468010", "Iraq/Babylon", UserType.Admin);
+            await CheckUserAsync( "Ahmed", "Almershady", "Ahmednet380@gmail.com", "+9647804468010", "Iraq/Babylon", "noimage.jpg", UserType.Admin);
+            await CheckUserAsync( "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
+            await CheckUserAsync( "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
+            await CheckUserAsync( "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
+            await CheckUserAsync( "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
+            await CheckUserAsync( "Celia", "Cruz", "celia@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.Admin);
+            await CheckUserAsync( "Fredy", "Mercury", "fredy@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
+            await CheckUserAsync( "Hector", "Lavoe", "hector@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
+            await CheckUserAsync( "Liv", "Taylor", "liv@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
+            await CheckUserAsync( "Otep", "Shamaya", "otep@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
+            await CheckUserAsync( "Ozzy", "Osbourne", "ozzy@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
+            await CheckUserAsync( "Selena", "Quintanilla", "selenba@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
+
 
 
         }
@@ -43,14 +60,87 @@ namespace Orders.Backend.Data
             }
 
         }
+        private async Task CheckProductsAsync()
+        {
+            if (!_context.Products.Any())
+            {
+              
+                await AddProductAsync("Sport Shoes - Adidas Barracuda", 270000M, 12F, new List<string>() { "Footwear", "Sports" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Sport Shoes - Adidas Superstar", 250000M, 12F, new List<string>() { "Footwear", "Sports" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Fresh Avocado", 5000M, 500F, new List<string>() { "Food" }, new List<string>() { "Avocado1.png", "Avocado2.png", "noimage.png" });
+                await AddProductAsync("Apple AirPods", 1300000M, 12F, new List<string>() { "Technology", "Apple" }, new List<string>() { "airpos.png", "noimage.png" });
+                await AddProductAsync("Akai Music Production Controller - APC40 MKII", 2650000M, 12F, new List<string>() { "Technology" }, new List<string>() { "noimage.png", "noimage.png", "noimage.png" });
+                await AddProductAsync("Apple Watch Series Ultra", 4500000M, 24F, new List<string>() { "Apple", "Technology" }, new List<string>() { "noimage.png", "noimage.png" });
+                await AddProductAsync("Bose Noise Cancelling Headphones", 870000M, 12F, new List<string>() { "Technology" }, new List<string>() { "bose_headphones.png" });
+                await AddProductAsync("Ribble Racing Bicycle", 12000000M, 6F, new List<string>() { "Sports" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Classic Plaid Shirt", 56000M, 24F, new List<string>() { "Clothing" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Cycling Helmet", 820000M, 12F, new List<string>() { "Sports" }, new List<string>() { "noimage.png", "noimage.png" });
+                await AddProductAsync("Sports Sunglasses", 160000M, 24F, new List<string>() { "Sports" }, new List<string>() { "noimage.png", "noimage.png", "noimage.png" });
+                await AddProductAsync("Triple Meat Burger Combo", 25500M, 240F, new List<string>() { "Food" }, new List<string>() { "noimage.png", "noimage.png", "noimage.png" });
+                await AddProductAsync("Apple iPad", 2300000M, 6F, new List<string>() { "Technology", "Apple" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Apple iPhone 13", 5200000M, 6F, new List<string>() { "Technology", "Apple" }, new List<string>() { "noimage.png", "noimage.png", "noimage.png", "noimage.png" });
+                await AddProductAsync("Johnnie Walker Blue Label Whisky - 750ml", 1266700M, 18F, new List<string>() { "Spirits" }, new List<string>() { "noimage.png", "noimage.png", "noimage.png" });
+                await AddProductAsync("Inflatable Rooster Costume", 150000M, 28F, new List<string>() { "Toys" }, new List<string>() { "noimage.png", "noimage.png", "noimage.png" });
+                await AddProductAsync("Apple Mac Book Pro", 12100000M, 6F, new List<string>() { "Technology", "Apple" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Adjustable Dumbbells", 370000M, 12F, new List<string>() { "Sports" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Hydrating Face Mask", 26000M, 100F, new List<string>() { "Beauty" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("New Balance Running Shoes - 530", 180000M, 12F, new List<string>() { "Footwear", "Sports" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("New Balance Running Shoes - 565", 179000M, 12F, new List<string>() { "Footwear", "Sports" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Nike Air Running Shoes", 233000M, 12F, new List<string>() { "Footwear", "Sports" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Nike Zoom Running Shoes", 249900M, 12F, new List<string>() { "Footwear", "Sports" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Adidas Women's Sports Sweatshirt", 134000M, 12F, new List<string>() { "Clothing", "Sports" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Boost Original Nutritional Supplement", 15600M, 12F, new List<string>() { "Nutrition" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Whey Protein Supplement", 252000M, 12F, new List<string>() { "Nutrition" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Pet Harness", 25000M, 12F, new List<string>() { "Pets" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Pet Bed", 99000M, 12F, new List<string>() { "Pets" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Gaming Keyboard", 67000M, 12F, new List<string>() { "Gamer", "Technology" }, new List<string>() { "noimage.png" });
+                await AddProductAsync("Luxury Car Wheel Ring - 17", 1600000M, 33F, new List<string>() { "Automobiles" }, new List<string>() { "noimage.png", "noimage.png" });
+                await AddProductAsync("Gaming Chair", 980000M, 12F, new List<string>() { "Gamer", "Technology" }, new List<string>() { "noimage.png" });
+                           
+                await _context.SaveChangesAsync();
 
-        private async Task<User> CheckUserAsync(string firstName, string lastName, string email, string phone, string Adress, UserType userType)
+            }
+
+        }
+        private async Task AddProductAsync(string name, decimal price, float stock, List<string> categories, List<string> images)
+        {
+            Product product = new()
+            {
+                Name = name,
+                Description = name,
+                Price = price,
+                Stock = stock,
+                ProductCategories = new List<ProductCategory>(),
+                ProductImages = new List<ProductImage>(),
+            };
+            foreach (var categoryName in categories)
+            {
+                var category = await _context.categories.FirstOrDefaultAsync(x => x.Name == categoryName);
+                if(category != null)
+                {
+                    product.ProductCategories.Add(new ProductCategory { Category = category });
+                }
+                foreach (string? image in images)
+                {
+                    var filePath = $"{Environment.CurrentDirectory}\\images\\products\\{image}";
+                    var fileBytes = File.ReadAllBytes(filePath);
+                    var imagePath = await _fileStorage.SaveFileAsync(fileBytes, "jpg", "products");
+                    product.ProductImages.Add(new ProductImage { Image = imagePath });
+                }
+                _context.Products.Add(product);
+
+            }
+        }
+        private async Task<User> CheckUserAsync(string firstName, string lastName, string email, string phone, string Adress, string image, UserType userType)
         {
             var user = await _usersUnitOfWork.GetUserAsync(email);
             if(user == null)
             {
                 var city = await _context.cities.FirstOrDefaultAsync(x => x.Name == "Medellín");
                 city ??= await _context.cities.FirstOrDefaultAsync();
+                var filePath = $"{Environment.CurrentDirectory}\\Images\\users\\{image}";
+                var fileBytes = File.ReadAllBytes(filePath);
+                var imagePath = await _fileStorage.SaveFileAsync(fileBytes, "jpg", "users");
 
                 user = new()
                 {
@@ -62,6 +152,7 @@ namespace Orders.Backend.Data
                     Address=Adress,
                     UserType=userType,
                     City=city,
+                    Photo=imagePath,
                 };
               await  _usersUnitOfWork.AddUserAsync(user, "123456");
               await _usersUnitOfWork.AddUserToRoleAsync(user, userType.ToString());
@@ -338,8 +429,19 @@ namespace Orders.Backend.Data
         {
             if(!_context.categories.Any())
             {
-                _context.categories.Add(new Category { Name = "computers" });
-                _context.categories.Add(new Category { Name = "Accessories" });
+                _context.categories.Add(new Category { Name = "Apple" });
+                _context.categories.Add(new Category { Name = "Cars" });
+                _context.categories.Add(new Category { Name = "Beauty" });
+                _context.categories.Add(new Category { Name = "Footwear" });
+                _context.categories.Add(new Category { Name = "Food" });
+                _context.categories.Add(new Category { Name = "Cosmetics" });
+                _context.categories.Add(new Category { Name = "Sports" });
+                _context.categories.Add(new Category { Name = "Gaming" });
+                _context.categories.Add(new Category { Name = "Toys" });
+                _context.categories.Add(new Category { Name = "Pets" });
+                _context.categories.Add(new Category { Name = "Nutrition" });
+                _context.categories.Add(new Category { Name = "Clothing" });
+                _context.categories.Add(new Category { Name = "Technology" });
             }
             await _context.SaveChangesAsync();
         }
