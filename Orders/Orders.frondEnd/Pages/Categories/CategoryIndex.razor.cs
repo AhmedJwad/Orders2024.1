@@ -59,10 +59,10 @@ namespace Orders.frondEnd.Pages.Categories
         private async Task LoadPagesAsync()
         {
             ValidateRecordsNumber();
-            var url = $"api/Categories/totalPages?RecordsNumber={RecordsNumber}";
+            var url = $"api/Categories/totalPages?recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
-                url += $"?filter={Filter}";
+                url += $"&Filter={Filter}";
             }
 
             var responseHttp = await repository.GetASync<int>(url);

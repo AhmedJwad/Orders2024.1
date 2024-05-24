@@ -57,7 +57,7 @@ namespace Orders.frondEnd.Pages.Countries
 
             if (!string.IsNullOrEmpty(Filter))
             {
-                url += $"?filter={Filter}";
+                url += $"&Filter={Filter}";
             }
             var responseHttp = await Reposotory.GetASync<int>(url);
             if (responseHttp.Error)

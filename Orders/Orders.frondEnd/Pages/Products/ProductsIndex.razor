@@ -1,0 +1,68 @@
+﻿@page "/products"
+
+<div class="card">
+    <div class="card-header">
+        <span>
+            <i class="bi bi-box2" /> Products
+            <a class="btn btn-sm btn-primary float-end" href="/products/create"><i class="bi bi-plus-square" /> Nuevo Producto</a>
+        </span>
+    </div>
+    <div class="card-body">
+        <Filter PlaceHolder="Search..." Callback=@FilterCallBack />
+        <GenericList MyList="products">
+           <body>
+                <Pagination CurrentPage="currentPage"
+                            TotalPages="totalPages"
+                            SelectedPage="SelectedPageAsync"
+                            RecordsNumber="SelectedRecordsNumberAsync" />
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Inventory</th>
+                            <th>Categories</th>
+                            <th>Images</th>
+                            <th>Main Image</th>
+                            <th style="width:168px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in products!)
+                        {
+                            <tr>
+                                <td>
+                                    @product.Name
+                                </td>
+                                <td>
+                                    @product.Description
+                                </td>
+                                <td>
+                                    @($"{product.Price:C2}")
+                                </td>
+                                <td>
+                                    @($"{product.Stock:N2}")
+                                </td>
+                                <td>
+                                    @product.ProductCategoriesNumber
+                                </td>
+                                <td>
+                                    @product.ProductImagesNumber
+                                </td>
+                                <td>
+                                     <img src="@($"{navigationManager.BaseUri}images/{@product.MainImage}")" style="width:100px;" />
+                                   
+                                </td>
+                                <td>
+                                    <a href="/products/edit/@product.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil" /> Edit</a>
+                                    <button class="btn btn-danger btn-sm" @onclick=@(() => Delete(product.Id))><i class="bi bi-trash" /> Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </Body>
+        </GenericList>
+    </div>
+</div>

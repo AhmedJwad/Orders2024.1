@@ -46,7 +46,7 @@ namespace Orders.Backend.Data
             await CheckUserAsync( "Otep", "Shamaya", "otep@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
             await CheckUserAsync( "Ozzy", "Osbourne", "ozzy@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
             await CheckUserAsync( "Selena", "Quintanilla", "selenba@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "noimage.jpg", UserType.User);
-
+            await CheckProductsAsync();
 
 
         }
@@ -67,11 +67,11 @@ namespace Orders.Backend.Data
               
                 await AddProductAsync("Sport Shoes - Adidas Barracuda", 270000M, 12F, new List<string>() { "Footwear", "Sports" }, new List<string>() { "noimage.png" });
                 await AddProductAsync("Sport Shoes - Adidas Superstar", 250000M, 12F, new List<string>() { "Footwear", "Sports" }, new List<string>() { "noimage.png" });
-                await AddProductAsync("Fresh Avocado", 5000M, 500F, new List<string>() { "Food" }, new List<string>() { "Avocado1.png", "Avocado2.png", "noimage.png" });
-                await AddProductAsync("Apple AirPods", 1300000M, 12F, new List<string>() { "Technology", "Apple" }, new List<string>() { "airpos.png", "noimage.png" });
+                await AddProductAsync("Fresh Avocado", 5000M, 500F, new List<string>() { "Food" }, new List<string>() { "noimage.png", "noimage.png", "noimage.png" });
+                await AddProductAsync("Apple AirPods", 1300000M, 12F, new List<string>() { "Technology", "Apple" }, new List<string>() { "noimage.png", "noimage.png" });
                 await AddProductAsync("Akai Music Production Controller - APC40 MKII", 2650000M, 12F, new List<string>() { "Technology" }, new List<string>() { "noimage.png", "noimage.png", "noimage.png" });
                 await AddProductAsync("Apple Watch Series Ultra", 4500000M, 24F, new List<string>() { "Apple", "Technology" }, new List<string>() { "noimage.png", "noimage.png" });
-                await AddProductAsync("Bose Noise Cancelling Headphones", 870000M, 12F, new List<string>() { "Technology" }, new List<string>() { "bose_headphones.png" });
+                await AddProductAsync("Bose Noise Cancelling Headphones", 870000M, 12F, new List<string>() { "Technology" }, new List<string>() { "noimageة.png" });
                 await AddProductAsync("Ribble Racing Bicycle", 12000000M, 6F, new List<string>() { "Sports" }, new List<string>() { "noimage.png" });
                 await AddProductAsync("Classic Plaid Shirt", 56000M, 24F, new List<string>() { "Clothing" }, new List<string>() { "noimage.png" });
                 await AddProductAsync("Cycling Helmet", 820000M, 12F, new List<string>() { "Sports" }, new List<string>() { "noimage.png", "noimage.png" });
