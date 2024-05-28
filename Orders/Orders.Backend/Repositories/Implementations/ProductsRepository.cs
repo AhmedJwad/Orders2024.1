@@ -77,6 +77,8 @@ namespace Orders.Backend.Repositories.Implementations
             }
         }
 
+       
+
         public override async Task<ActionResponse<Product>> GetAsync(int id)
         {
             var product = await _context.Products
@@ -133,6 +135,8 @@ namespace Orders.Backend.Repositories.Implementations
 
         }
 
+       
+
         public async Task<ActionResponse<Product>> UpdateFullAsync(ProductDTO productDTO)
         {
             try
@@ -188,6 +192,80 @@ namespace Orders.Backend.Repositories.Implementations
                 };
 
             }
+        }
+        public async Task<ActionResponse<ImageDTO>> AddImageAsync(ImageDTO imageDTO)
+        {
+            var product = await _context.Products.Include(x => x.ProductImages)
+                .FirstOrDefaultAsync(x => x.Id == imageDTO.ProductId);
+            if(product ==null)
+            {
+                return new ActionResponse<ImageDTO>
+                {
+                    wasSuccess = false,
+                    Message = "product not exist"
+                };
+               
+            }
+            for (int i = 0; i < imageDTO.Images.Count; i++)
+            {
+                if (!imageDTO.Images[i].StartsWith("https://localhost:7051/images/products"))
+                {
+                    try
+                    {
+                        var photoProduct = Convert.FromBase64String(imageDTO.Images[i]);
+                        imageDTO.Images[i] = await _fileStoragecs.SaveFileAsync(photoProduct, ".jpg", "products");
+                        product.ProductImages!.Add(new ProductImage { Image = imageDTO.Images[i] });
+                    }
+                    catch (FormatException ex)
+                    {
+
+                        Console.WriteLine($"Error converting image at index {i}: {ex.Message}");
+                    }
+                }
+            }
+            _context.Update(product);
+            await _context.SaveChangesAsync();
+            return new ActionResponse<ImageDTO>
+            {
+                wasSuccess = true,
+                Result = imageDTO,
+            };
+        }
+        public async Task<ActionResponse<ImageDTO>> RemoveLastImageAsync(ImageDTO imageDTO)
+        {
+            var product = await _context.Products
+                   .Include(x => x.ProductImages)
+                   .FirstOrDefaultAsync(x => x.Id == imageDTO.ProductId);
+            if (product == null)
+            {
+                return new ActionResponse<ImageDTO>
+                {
+                    wasSuccess = false,
+                    Message = "Producto no existe"
+                };
+            }
+
+            if (product.ProductImages is null || product.ProductImages.Count == 0)
+            {
+                return new ActionResponse<ImageDTO>
+                {
+                    wasSuccess = true,
+                    Result = imageDTO
+                };
+            }
+
+            var lastImage = product.ProductImages.LastOrDefault();
+            await _fileStoragecs.RemoveFileAsync(lastImage!.Image, "products");
+            _context.ProductImages.Remove(lastImage);
+
+            await _context.SaveChangesAsync();
+            imageDTO.Images = product.ProductImages.Select(x => x.Image).ToList();
+            return new ActionResponse<ImageDTO>
+            {
+               wasSuccess = true,
+                Result = imageDTO
+            };
+
         }
     }
 }

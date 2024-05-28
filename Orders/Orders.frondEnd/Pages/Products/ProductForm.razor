@@ -65,3 +65,7 @@
     </div>
 
 </EditForm>
+@if(IsEdit && productDTO.ProductImages is not null)
+{
+   <CarouselView  Images="productDTO.ProductImages"/>
+}

@@ -19,6 +19,8 @@ namespace Orders.Backend.UnitsOfWork.Implementations
         public async Task<ActionResponse<Product>> AddFullAsync(ProductDTO productDTO)
        => await _productsRepository.AddFullAsync(productDTO);
 
+       
+
         public async Task<ActionResponse<Product>> GetAsync(int id)
         => await _productsRepository.GetAsync(id);
 
@@ -28,6 +30,11 @@ namespace Orders.Backend.UnitsOfWork.Implementations
         public async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         => await _productsRepository.GetTotalPagesAsync(pagination);
 
+        public async Task<ActionResponse<ImageDTO>> RemoveLastImageAsync(ImageDTO imageDTO)=> 
+            await _productsRepository.RemoveLastImageAsync(imageDTO);
+
+        public async Task<ActionResponse<ImageDTO>> AddImageAsync(ImageDTO imageDTO)
+        => await _productsRepository.AddImageAsync(imageDTO);
         public async Task<ActionResponse<Product>> UpdateFullAsync(ProductDTO productDTO)
         =>await _productsRepository.UpdateFullAsync(productDTO);
     }

@@ -1,0 +1,11 @@
+﻿@page "/products/edit/{ProductId:int}"
+
+@if (loading)
+{
+    <Loading />
+}
+else
+{
+    <ProductForm @ref="productForm" productDTO="ProductDTO" SelectedCategories="selectedCategories" NonSelectedCategories="nonSelectedCategories" OnValidSubmit="SaveChangesAsync" ReturnAction="Return" IsEdit=true AddImageAction="AddImageAsync" RemoveImageAction="RemoveImageAsyc" />
+
+}

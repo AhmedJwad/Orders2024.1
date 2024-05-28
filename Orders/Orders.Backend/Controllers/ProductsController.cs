@@ -72,5 +72,29 @@ namespace Orders.Backend.Controllers
             }
             return NotFound(action.Message);
         }
+
+        [HttpPost("addImages")]
+        public async Task<IActionResult> PostAddImagesAsync (ImageDTO imageDTO)
+        {
+            var action=await _productsUnitOfWork.AddImageAsync(imageDTO);
+            if (action.wasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest(action.Message);
+
+        }
+        [HttpPost("removeLastImage")]
+        public async Task<IActionResult> PostRemoveLastImageAsync(ImageDTO imageDTO)
+        {
+            var action = await _productsUnitOfWork.RemoveLastImageAsync(imageDTO);
+            if (action.wasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest(action.Message);
+        }
+
+
     }
 }
