@@ -13,6 +13,8 @@ namespace Orders.Backend.Repositories.Interfaces
         Task<ActionResponse<Product>> UpdateFullAsync(ProductDTO productDTO);
         Task<ActionResponse<ImageDTO>> AddImageAsync(ImageDTO imageDTO);
         Task<ActionResponse<ImageDTO>> RemoveLastImageAsync(ImageDTO imageDTO);
+        Task<ActionResponse<Product>> DeleteAsync(int id);
+
 
     }
 }

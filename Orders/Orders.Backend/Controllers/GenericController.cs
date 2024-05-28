@@ -80,7 +80,7 @@ namespace Orders.Backend.Controllers
         }
 
         [HttpDelete("id")]
-        public virtual async Task<ActionResult>DeleteAsync(int id)
+        public virtual async Task<IActionResult>DeleteAsync(int id)
         {
             var action=await _genericUnitOfWork.DeleteAsync(id);
             if(action.wasSuccess)

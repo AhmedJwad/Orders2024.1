@@ -37,5 +37,7 @@ namespace Orders.Backend.UnitsOfWork.Implementations
         => await _productsRepository.AddImageAsync(imageDTO);
         public async Task<ActionResponse<Product>> UpdateFullAsync(ProductDTO productDTO)
         =>await _productsRepository.UpdateFullAsync(productDTO);
+        public override async Task<ActionResponse<Product>> DeleteAsync(int id) => await _productsRepository.DeleteAsync(id);
+
     }
 }

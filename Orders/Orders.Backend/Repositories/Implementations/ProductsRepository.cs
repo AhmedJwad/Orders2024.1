@@ -267,5 +267,45 @@ namespace Orders.Backend.Repositories.Implementations
             };
 
         }
+
+        public override async Task<ActionResponse<Product>> DeleteAsync(int id)
+        {
+            var product = await _context.Products.Include(x => x.ProductCategories)
+                .Include(x => x.ProductImages).FirstOrDefaultAsync(x => x.Id == id);
+            if (product == null)
+            {
+                return new ActionResponse<Product>
+                {
+                    wasSuccess = false,
+                    Message = "Product not found",
+                };
+            }
+            foreach (var image in product.ProductImages!)
+            {
+                await _fileStoragecs.RemoveFileAsync(image.Image, "products");
+            }
+
+            try
+            {
+                _context.ProductCategories.RemoveRange(product.ProductCategories!);
+                _context.ProductImages.RemoveRange(product.ProductImages);
+                _context.Remove(product);
+                await _context.SaveChangesAsync();
+                return new ActionResponse<Product>
+                {
+                    wasSuccess = true,
+
+                };
+            }
+            catch
+            {
+
+                return new ActionResponse<Product>
+                {
+                    wasSuccess = false,
+                    Message = "The product cannot be deleted, because it has related records"
+                };
+            }
+        }
     }
 }

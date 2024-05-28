@@ -94,6 +94,16 @@ namespace Orders.Backend.Controllers
             }
             return BadRequest(action.Message);
         }
+        [HttpDelete("{id}")]
+        public override async Task<IActionResult> DeleteAsync(int id)
+        {
+            var action = await _productsUnitOfWork.DeleteAsync(id);
+            if (!action.wasSuccess)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
 
 
     }
