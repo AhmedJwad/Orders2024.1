@@ -14,6 +14,7 @@ namespace Orders.frondEnd.Shared
         [Parameter] public EventCallback<int> RecordsNumber { get; set; }
 
         [Parameter] public EventCallback<int> SelectedPage { get; set; }
+        [Parameter] public bool IsHome { get; set; } = false;
 
         protected override void OnParametersSet()
         {
@@ -23,13 +24,26 @@ namespace Orders.frondEnd.Shared
 
         private void BuildOptions()
         {
-            options = [
-                        new OptionModel{Value=10, Name="10"},
+           if(IsHome)
+            {
+                options = [
+                       new OptionModel{Value=8, Name="8"},
+                        new OptionModel{Value=16, Name="16"},
+                        new OptionModel{Value=32, Name="32"},
+                        new OptionModel{Value=int.MaxValue, Name="All"},
+
+                      ];
+            }
+           else
+            {
+                options = [
+                       new OptionModel{Value=10, Name="10"},
                         new OptionModel{Value=25, Name="25"},
                         new OptionModel{Value=50, Name="50"},
                         new OptionModel{Value=int.MaxValue, Name="All"},
 
                       ];
+            }
         }
 
         private void BuildPages()

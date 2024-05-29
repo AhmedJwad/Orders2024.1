@@ -20,6 +20,7 @@ namespace Orders.Backend.Controllers
         {
            _productsUnitOfWork = productsUnitOfWork;
         }
+        [AllowAnonymous]
         [HttpGet]
         public override async Task<IActionResult> GetAsync([FromQuery]PaginationDTO paginationDTO)
         {
@@ -31,6 +32,7 @@ namespace Orders.Backend.Controllers
             return BadRequest();
 
         }
+        [AllowAnonymous]
         [HttpGet("totalPages")]
         public override async Task<IActionResult> GetPagesAsync([FromQuery]PaginationDTO pagination)
         {
@@ -41,7 +43,7 @@ namespace Orders.Backend.Controllers
             }
             return BadRequest();
         }
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public override async Task<IActionResult> GetAsync(int id)
         {

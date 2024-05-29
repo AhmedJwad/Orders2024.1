@@ -41,6 +41,8 @@ namespace Orders.Shared.Entities
 
         [Display(Name = "User")]
         public string FullName => $"{FirstName} {LastName}";
+        public ICollection<TemporalOrder>? TemporalOrders { get; set; }
+
 
     }
 }

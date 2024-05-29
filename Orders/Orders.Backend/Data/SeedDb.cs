@@ -71,7 +71,7 @@ namespace Orders.Backend.Data
                 await AddProductAsync("Apple AirPods", 1300000M, 12F, new List<string>() { "Technology", "Apple" }, new List<string>() { "noimage.png", "noimage.png" });
                 await AddProductAsync("Akai Music Production Controller - APC40 MKII", 2650000M, 12F, new List<string>() { "Technology" }, new List<string>() { "noimage.png", "noimage.png", "noimage.png" });
                 await AddProductAsync("Apple Watch Series Ultra", 4500000M, 24F, new List<string>() { "Apple", "Technology" }, new List<string>() { "noimage.png", "noimage.png" });
-                await AddProductAsync("Bose Noise Cancelling Headphones", 870000M, 12F, new List<string>() { "Technology" }, new List<string>() { "noimageة.png" });
+                await AddProductAsync("Bose Noise Cancelling Headphones", 870000M, 12F, new List<string>() { "Technology" }, new List<string>() { "noimage.png" });
                 await AddProductAsync("Ribble Racing Bicycle", 12000000M, 6F, new List<string>() { "Sports" }, new List<string>() { "noimage.png" });
                 await AddProductAsync("Classic Plaid Shirt", 56000M, 24F, new List<string>() { "Clothing" }, new List<string>() { "noimage.png" });
                 await AddProductAsync("Cycling Helmet", 820000M, 12F, new List<string>() { "Sports" }, new List<string>() { "noimage.png", "noimage.png" });
