@@ -37,7 +37,7 @@ namespace Orders.Backend.Controllers
             if (action.wasSuccess) 
             { return Ok(action.Result); }
 
-            return BadRequest(action.Result);
+            return BadRequest(action.Message);
         }
 
         [HttpGet("count")]
@@ -46,7 +46,7 @@ namespace Orders.Backend.Controllers
         {
             var action = await _temporalOrdersUnitOfWork.GetCountAsync(User.Identity!.Name!);
             if (action.wasSuccess) { return Ok(action.Result); }
-            return BadRequest(action.Result);
+            return BadRequest(action.Message);
         }
 
     }

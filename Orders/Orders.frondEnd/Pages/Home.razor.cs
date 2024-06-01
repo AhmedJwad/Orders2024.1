@@ -1,5 +1,6 @@
 ﻿using Blazored.Modal.Services;
 using CurrieTechnologies.Razor.SweetAlert2;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Orders.frondEnd.Pages.Auth;
@@ -9,58 +10,64 @@ using Orders.Shared.Entities;
 
 namespace Orders.frondEnd.Pages
 {
+    
     public partial class Home
     {
         private int currentPage = 1;
         private int totalPages;
         private int counter = 0;
         private bool isAuthenticated;
+       
 
         public List<Product>? Products { get; set; }
+        public List<Category>? Categories { get; set; }
+        public string CategoryFilter { get; set; } = string.Empty;
+
+
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
-        [Inject] private SweetAlertService sweetAlertService { get; set; } = null!;
+        [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 8;
+
         [CascadingParameter] private Task<AuthenticationState> authenticationStateTask { get; set; } = null!;
         [CascadingParameter] private IModalService Modal { get; set; } = default!;
-
 
         protected override async Task OnInitializedAsync()
         {
             await LoadAsync();
         }
 
-        protected override async Task OnParametersSetAsync()
+        protected async override Task OnParametersSetAsync()
         {
             await CheckIsAuthenticatedAsync();
             await LoadCounterAsync();
-
+            
         }
+
+        
 
         private async Task CheckIsAuthenticatedAsync()
         {
-            var authenticationState=await authenticationStateTask;
+            var authenticationState = await authenticationStateTask;
             isAuthenticated = authenticationState.User.Identity!.IsAuthenticated;
-
         }
+
         private async Task LoadCounterAsync()
         {
-           if(!isAuthenticated)
+            if (!isAuthenticated)
             {
                 return;
             }
-            var responseHttp=await Repository.GetASync<int>("/api/temporalOrders/count");
+
+            var responseHttp = await Repository.GetASync<int>("/api/temporalOrders/count");
             if (responseHttp.Error)
             {
                 return;
             }
             counter = responseHttp.Response;
-
         }
-
-
 
         private async Task SelectedRecordsNumberAsync(int recordsnumber)
         {
@@ -85,6 +92,7 @@ namespace Orders.frondEnd.Pages
 
         private async Task LoadAsync(int page = 1)
         {
+            
             if (!string.IsNullOrWhiteSpace(Page))
             {
                 page = Convert.ToInt32(Page);
@@ -114,11 +122,16 @@ namespace Orders.frondEnd.Pages
                 url += $"&filter={Filter}";
             }
 
+            if (!string.IsNullOrEmpty(CategoryFilter))
+            {
+                url += $"&CategoryFilter={CategoryFilter}";
+            }
+
             var response = await Repository.GetASync<List<Product>>(url);
             if (response.Error)
             {
                 var message = await response.GetErrorMessageAsync();
-                await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return false;
             }
             Products = response.Response;
@@ -133,12 +146,16 @@ namespace Orders.frondEnd.Pages
             {
                 url += $"&filter={Filter}";
             }
+            if (!string.IsNullOrEmpty(CategoryFilter))
+            {
+                url += $"&CategoryFilter={CategoryFilter}";
+            }
 
             var response = await Repository.GetASync<int>(url);
             if (response.Error)
             {
                 var message = await response.GetErrorMessageAsync();
-                await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
             totalPages = response.Response;
@@ -151,12 +168,12 @@ namespace Orders.frondEnd.Pages
             await SelectedPageAsync(page);
         }
 
-        private async void AddToCartAsync(int productId)
+        private async Task AddToCartAsync(int productId)
         {
-            if(!isAuthenticated)
+            if (!isAuthenticated)
             {
                 Modal.Show<Login>();
-                var toast1 = sweetAlertService.Mixin(new SweetAlertOptions
+                var toast1 = SweetAlertService.Mixin(new SweetAlertOptions
                 {
                     Toast = true,
                     Position = SweetAlertPosition.BottomEnd,
@@ -175,13 +192,13 @@ namespace Orders.frondEnd.Pages
             if (httpActionResponse.Error)
             {
                 var message = await httpActionResponse.GetErrorMessageAsync();
-                await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
 
             await LoadCounterAsync();
 
-            var toast2 = sweetAlertService.Mixin(new SweetAlertOptions
+            var toast2 = SweetAlertService.Mixin(new SweetAlertOptions
             {
                 Toast = true,
                 Position = SweetAlertPosition.BottomEnd,
@@ -189,8 +206,6 @@ namespace Orders.frondEnd.Pages
                 Timer = 3000
             });
             await toast2.FireAsync(icon: SweetAlertIcon.Success, message: "Product added to shopping cart..");
-
-
         }
 
     }
