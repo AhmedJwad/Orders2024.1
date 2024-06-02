@@ -19,7 +19,7 @@ namespace Orders.Backend.Repositories.Implementations
         }
         public override async Task<ActionResponse<Country>> GetAsync(int id)
         {
-            var countries=await _context.countries.Include(x=>x.states).ThenInclude(x=>x.cities).FirstOrDefaultAsync(x=>x.Id==id);
+            var countries=await _context.countries.Include(x=>x.states!).ThenInclude(x=>x.cities).FirstOrDefaultAsync(x=>x.Id==id);
             if(countries == null)
             {
                 return new ActionResponse<Country>

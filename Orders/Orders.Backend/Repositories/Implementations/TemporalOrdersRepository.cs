@@ -80,6 +80,8 @@ namespace Orders.Backend.Repositories.Implementations
             };
         }
 
+        
+
         public async Task<ActionResponse<int>> GetCountAsync(string email)
         {
             var count = await _context.TemporalOrders.Where(x => x.User!.Email == email)
@@ -90,5 +92,50 @@ namespace Orders.Backend.Repositories.Implementations
                 Result = (int)count,
             };
         }
+
+        public async Task<ActionResponse<TemporalOrder>> PutFullAsync(TemporalOrderDTO temporalOrderDTO)
+        {
+           var currentTemporalOrder=await _context.TemporalOrders.FirstOrDefaultAsync(x=>x.Id==temporalOrderDTO.Id);
+            if (currentTemporalOrder == null)
+            {
+                return new ActionResponse<TemporalOrder>
+                {
+                    wasSuccess = false,
+                    Message = "Record not found",
+                };
+            }
+                currentTemporalOrder!.Remarks=temporalOrderDTO.Remarks;
+                currentTemporalOrder.Quantity=temporalOrderDTO.Quantity;
+                _context.Update(currentTemporalOrder);
+                await _context.SaveChangesAsync();
+                return new ActionResponse<TemporalOrder>
+                {
+                    wasSuccess = true,
+                    Result = currentTemporalOrder,
+                };
+                
+         }
+        public override async Task<ActionResponse<TemporalOrder>> GetAsync(int id)
+        {
+            var temporalOrder=await _context.TemporalOrders.Include(x=>x.User!)
+                .Include(x=>x.Product!).ThenInclude(x=>x.ProductCategories!).ThenInclude(x=>x.Category)
+                .Include(x=>x.Product).ThenInclude(x=>x.ProductImages).FirstOrDefaultAsync(x=>x.Id==id);
+            if (temporalOrder == null)
+            {
+                return new ActionResponse<TemporalOrder>
+                {
+                    wasSuccess = false,
+                    Message = "Record not found"
+                };
+            }
+            return new ActionResponse<TemporalOrder>
+            {
+                wasSuccess = true,
+                Result = temporalOrder,
+            };
+
+        }
+
+
     }
 }
