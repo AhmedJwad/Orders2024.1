@@ -85,9 +85,32 @@ namespace Orders.frondEnd.Pages.Cart
             await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Product removed from shopping cart.");
 
         }
-        private void ConfirmOrderAsync()
+        private async void ConfirmOrderAsync()
         {
-            //TODO: Pending to implement
+            var result = await SweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title= "Confirmation",
+                Text= "Are you sure you want to confirm the order?",
+                Icon=SweetAlertIcon.Question,
+                ShowCancelButton=true,
+                
+            });
+            var confirm = string.IsNullOrEmpty(result.Value);
+            if (confirm)
+            {
+                return;
+            }
+            var httpActionResponse = await Repository.PostAsync("/api/orders", orderDTO);
+            if (httpActionResponse.Error)
+            {
+                var message = await httpActionResponse.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                return;
+            }
+
+            navigationManager.NavigateTo("/Cart/OrderConfirmed");
+
+
         }
 
     }
