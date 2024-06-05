@@ -34,6 +34,10 @@ namespace Orders.Backend.Repositories.Implementations
             }
             var queryable = _context.Orders.Include(x => x.User!)
                 .Include(x => x.OrderDetails!).ThenInclude(x => x.Product).AsQueryable();
+            if (!string.IsNullOrEmpty(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.User!.FirstName.ToLower().Contains(pagination.Filter.ToLower()));
+            }
             var isAdmin = await _usersRepository.IsUserInRoleAsync(user, UserType.Admin.ToString());
             if(!isAdmin)
             {
@@ -79,6 +83,10 @@ namespace Orders.Backend.Repositories.Implementations
                 };
             }
             var queryable = _context.Orders.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.User!.FirstName.ToLower().Contains(pagination.Filter.ToLower()));
+            }
             var isAdmin = await _usersRepository.IsUserInRoleAsync(user, UserType.Admin.ToString());
             if (!isAdmin)
             {

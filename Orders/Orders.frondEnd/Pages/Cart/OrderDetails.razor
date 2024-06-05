@@ -1,0 +1,92 @@
+﻿@page "/cart/orderDetails/{OrderId:int}"
+
+@if (order is null)
+{
+    <Loading />
+}
+else
+{
+    <GenericList MyList="order.OrderDetails!.ToList()">
+        <body>
+            <div class="card">
+                <div class="card-header">
+                    <span>
+                        <i class="bi bi-currency-dollar"></i> @order.User!.FullName
+                        @if (order.OrderStatus == OrderStatus.New)
+                        {
+                            <button class="btn btn-sm btn-danger float-end mx-2" @onclick=@(() => CancelOrderAsync())><i class="bi bi-trash" /> Cancel</button>
+                            <button class="btn btn-sm btn-primary float-end mx-2" @onclick=@(() => DispatchOrderAsync())><i class="bi bi-truck" /> Dispatch</button>
+                        }
+                        else if (order.OrderStatus == OrderStatus.Dispatched)
+                        {
+                            <button class="btn btn-sm btn-warning float-end mx-2" @onclick=@(() => SendOrderAsync())><i class="bi bi-send" /> To send</button>
+                        }
+                        else if (order.OrderStatus == OrderStatus.Sent)
+                        {
+                            <button class="btn btn-sm btn-dark float-end mx-2" @onclick=@(() => ConfirmOrderAsync())><i class="bi bi-hand-thumbs-up" /> Confirm</button>
+                        }
+                        <a class="btn btn-sm btn-success float-end" href="/orders"><i class="bi bi-arrow-left" /> Return</a>
+                    </span>
+                </div>
+                <div class="row mx-2 my-2">
+                    <div class="col-2">
+                        <p>Client</p>
+                        <p>Telephone</p>
+                        <p>Email</p>
+                        <p>Address</p>
+                    </div>
+                    <div class="col-4">
+                        <p><strong>@order.User.FullName</strong></p>                       
+                        <p><strong>@order.User.PhoneNumber</strong></p>
+                        <p><strong>@order.User.UserName</strong></p>
+                        <p><strong>@order.User.Address, @order.User.City!.Name, @order.User.City.State!.Name, @order.User.City.State.Country!.Name</strong></p>
+                    </div>
+                    <div class="col-2">
+                        <p>state</p>
+                        <p>Date</p>
+                        <p>Comments</p>
+                        <p>Lines</p>
+                        <p>Amount</p>
+                        <p>Value</p>
+                    </div>
+                    <div class="col-4">
+                        <p><strong>@EnumHelper.GetEnumDescription(order.OrderStatus)</strong></p>
+                        <p><strong>@($"{order.Date.ToLocalTime():yyyy/MM/dd hh:mm tt}")</strong></p>
+                        <p><strong>@(string.IsNullOrEmpty(order.Remarks) ? "NA" : order.Remarks)</strong></p>
+                        <p><strong>@order.Lines</strong></p>
+                        <p><strong>@($"{order.Quantity:N2}")</strong></p>
+                        <p><strong>@($"{order.Value:C2}")</strong></p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Image</th>
+                                <th>Comments</th>
+                                <th>Amount</th>
+                                <th>Price</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var saleDetail in order.OrderDetails!)
+                            {
+                                <tr>
+                                    <td>@saleDetail.Product!.Name</td>
+                                    <td><img src=" @($"{NavigationManager.BaseUri}images/{saleDetail.Product.MainImage}")" style="width:100px;" /></td>
+                                    <td>@saleDetail.Remarks</td>
+                                    <td>@($"{saleDetail.Quantity:N2}")</td>
+                                    <td>@($"{saleDetail.Product!.Price:C2}")</td>
+                                    <td>@($"{saleDetail.Value:C2}")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </body>
+    </GenericList>
+}
