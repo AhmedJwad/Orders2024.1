@@ -15,16 +15,27 @@ else
                         @if (order.OrderStatus == OrderStatus.New)
                         {
                             <button class="btn btn-sm btn-danger float-end mx-2" @onclick=@(() => CancelOrderAsync())><i class="bi bi-trash" /> Cancel</button>
-                            <button class="btn btn-sm btn-primary float-end mx-2" @onclick=@(() => DispatchOrderAsync())><i class="bi bi-truck" /> Dispatch</button>
+                           <AuthorizeView (Roles ="Admin">
+                               <Authorized>
+                                    <button class="btn btn-sm btn-primary float-end mx-2" @onclick=@(() => DispatchOrderAsync())><i class="bi bi-truck" /> Dispatch</button>
+                               </Authorized>
+                           </AuthorizeView>
+
                         }
-                        else if (order.OrderStatus == OrderStatus.Dispatched)
-                        {
-                            <button class="btn btn-sm btn-warning float-end mx-2" @onclick=@(() => SendOrderAsync())><i class="bi bi-send" /> To send</button>
-                        }
-                        else if (order.OrderStatus == OrderStatus.Sent)
-                        {
-                            <button class="btn btn-sm btn-dark float-end mx-2" @onclick=@(() => ConfirmOrderAsync())><i class="bi bi-hand-thumbs-up" /> Confirm</button>
-                        }
+                        <AuthorizeView (Roles="Admin")>
+                            <Authorized>
+                                @if (order.OrderStatus == OrderStatus.Dispatched)
+                                {
+                                    <button class="btn btn-sm btn-warning float-end mx-2" @onclick=@(() => SendOrderAsync())><i class="bi bi-send" /> To send</button>
+                                }
+                               @if (order.OrderStatus == OrderStatus.Sent)
+                                {
+                                    <button class="btn btn-sm btn-dark float-end mx-2" @onclick=@(() => ConfirmOrderAsync())><i class="bi bi-hand-thumbs-up" /> Confirm</button>
+                                }
+                            </Authorized>
+                        </AuthorizeView>
+                      
+                       
                         <a class="btn btn-sm btn-success float-end" href="/orders"><i class="bi bi-arrow-left" /> Return</a>
                     </span>
                 </div>
