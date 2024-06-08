@@ -8,6 +8,7 @@ using Orders.Shared.Entities;
 using Orders.Shared.Enums;
 using Orders.Shared.Responses;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Orders.Backend.Data
 {
@@ -122,7 +123,16 @@ namespace Orders.Backend.Data
                 }
                 foreach (string? image in images)
                 {
-                    var filePath = $"{Environment.CurrentDirectory}\\images\\products\\{image}";
+                    string filePath;
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        filePath = $"{Environment.CurrentDirectory}\\Images\\products\\{image}";
+                    }
+                    else
+                    {
+                        filePath = $"{Environment.CurrentDirectory}/Images/products/{image}";
+                    }
+
                     var fileBytes = File.ReadAllBytes(filePath);
                     var imagePath = await _fileStorage.SaveFileAsync(fileBytes, "jpg", "products");
                     product.ProductImages.Add(new ProductImage { Image = imagePath });

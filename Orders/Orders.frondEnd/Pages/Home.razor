@@ -6,9 +6,18 @@
 }
 else
 {
+    @if (Categories != null)
+    {
+        <div class="d-flex flex-wrap justify-content-center  mb-4 mt-2">
+            @foreach (var category in Categories)
+            {
+                <a class="btn btn-link" style="cursor: pointer" @onclick=@(() => LoadAsync(1, category.Name))>@category.Name</a>
+            }
+            <a class="btn btn-link" style="cursor: pointer" @onclick=@(() => LoadAsync(1, allCategories))>All Categories</a>
+        </div>
+    }
     <div class="d-flex align-items-center justify-content-between">
-
-    <Filter PlaceHolder="Search..." Callback=@FilterCallBack />
+      <Filter PlaceHolder="Search..." Callback=@FilterCallBack />
         <AuthorizeView>
             <Authorized>
                 @if (counter > 0)

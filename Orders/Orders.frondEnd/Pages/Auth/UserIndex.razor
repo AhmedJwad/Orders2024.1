@@ -1,0 +1,57 @@
+﻿@page "/users"
+
+@if (Users is null)
+{
+    <Loading />
+}
+else
+{
+    <GenericList MyList="Users">
+        <body>
+            <div class="card">
+                <div class="card-header">
+                    <span>
+                        <i class="bi bi-people" /> Users
+                        <a class="btn btn-sm btn-primary float-end" href="/register/?IsAdmin=true"><i class="bi bi-plus-circle" /> Add Admin</a>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <Filter PlaceHolder="Search Users..." Callback=@FilterCallBack />
+                    <Pagination CurrentPage="currentPage"
+                                TotalPages="totalPages"
+                                SelectedPage="SelectedPageAsync"
+                                RecordsNumber="SelectedRecordsNumberAsync" />
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>User</th>                              
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Confirmed</th>
+                                <th>User Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Users)
+                            {
+                                <tr>
+                                    <td><img src="@($"{navigationManager.BaseUri}images/{user.Photo}")" width="80" height="80" style="border-radius:50%" /></td>
+                                    <td>@user.FullName</td>                                   
+                                    <td>@user.PhoneNumber</td>
+                                    <td>@user.Email</td>
+                                    <td>@user.Address, @user.City!.Name, @user.City!.State!.Name, @user.City!.State!.Country!.Name</td>
+                                    <td>@user.EmailConfirmed</td>
+                                    <td>@EnumHelper.GetEnumDescription(user.UserType)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </body>
+    </GenericList>
+}
+

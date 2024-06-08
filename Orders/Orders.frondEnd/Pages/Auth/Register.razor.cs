@@ -24,6 +24,7 @@ namespace Orders.frondEnd.Pages.Auth
         [Inject] private IRepository repository { get; set; } = null!;
         [Inject] private ILoginService loginService { get; set; } = null!;
 
+        [Parameter, SupplyParameterFromQuery] public bool IsAdmin { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
@@ -91,6 +92,11 @@ namespace Orders.frondEnd.Pages.Auth
         {
             userDTO.UserName = userDTO.Email;
             userDTO.UserType = UserType.User;
+            if (IsAdmin)
+            {
+                userDTO.UserType = UserType.Admin;
+            }
+
             loading = true;
 
             var responseHttp = await repository.PostAsync<UserDTO>("/api/accounts/CreateUser", userDTO);
